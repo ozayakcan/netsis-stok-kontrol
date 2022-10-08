@@ -10,13 +10,9 @@ class Veritabani {
   static const String veritabaniBilgileriStr = "veritabaniBilgileri";
   static const String veritabaniBaglandiStr = "veritabaniBaglandii";
 
-  static Future<void> veritabaniBilgileriKaydet({
+  static Future<bool> baglan({
     required VeritabaniBilgileriModel veritabaniBilgileriModel,
-    VoidCallback? beforeSave,
-    VoidCallback? onSaveSuccess,
-    OnSaveError? onSaveError,
   }) async {
-    beforeSave?.call();
     try {
       await SqlConn.connect(
         ip: veritabaniBilgileriModel.ip,
@@ -25,7 +21,26 @@ class Veritabani {
         username: veritabaniBilgileriModel.kullaniciAdi,
         password: veritabaniBilgileriModel.sifre,
       );
-      if (SqlConn.isConnected) {
+      return true;
+    } catch (e) {
+      if (kDebugMode) {
+        print("Veritabanına Bağlanılamadı! Hata: ${e.toString()}");
+      }
+      return false;
+    }
+  }
+
+  static Future<void> veritabaniBilgileriKaydet({
+    required VeritabaniBilgileriModel veritabaniBilgileriModel,
+    VoidCallback? beforeSave,
+    VoidCallback? onSaveSuccess,
+    OnSaveError? onSaveError,
+  }) async {
+    beforeSave?.call();
+    try {
+      bool durum =
+          await baglan(veritabaniBilgileriModel: veritabaniBilgileriModel);
+      if (durum) {
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
         sharedPreferences.setStringList(
@@ -40,8 +55,7 @@ class Veritabani {
       if (kDebugMode) {
         print("Veritabanı Bilgileri Kaydedilemedi! Hata: ${e.toString()}");
       }
-      onSaveError?.call(
-          "Veritabanına bağlanılamadı! Lütfen bilgileri kontrol edip tekrar deneyin!");
+      onSaveError?.call("Bir hata oluştu! Lütfen tekrar deneyin!");
     }
   }
 

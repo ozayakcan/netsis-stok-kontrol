@@ -5,12 +5,14 @@ void diyalogGoster(
   required bool diyalogDurumu,
   required VoidCallback afterDisplayed,
   String? text,
+  List<Widget>? actions,
 }) {
   if (!diyalogDurumu) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
+          actions: actions,
           content: Row(
             children: [
               const CircularProgressIndicator(),
