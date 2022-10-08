@@ -14,9 +14,11 @@ class App_Model extends CI_Model
     public $tblStok = "TBLSTSABIT";
     public $tblStokHar = "TBLSTHAR";
     public $stokKoduStr = "STOK_KODU";
-    public function stoklar($host, $veritabaniAdi, $kullaniciAdi, $sifre, $port = "")
+    public $baslangicStr = "baslangic";
+    public $ogeSayisiStr = "ogeSayisi";
+    public function stoklar($host, $veritabaniAdi, $kullaniciAdi, $sifre, $baslangic, $ogeSayisi, $port = "")
     {
-        return $this->veritabani($host, $veritabaniAdi, $kullaniciAdi, $sifre, $port)->limit(50)->order_by($this->stokKoduStr, "DESC")->get($this->tblStok)->result();
+        return $this->veritabani($host, $veritabaniAdi, $kullaniciAdi, $sifre, $port)->limit($ogeSayisi,$baslangic)->order_by($this->stokKoduStr, "DESC")->get($this->tblStok)->result();
     }
     public function stokHareket($host, $veritabaniAdi, $kullaniciAdi, $sifre, $stokKodu, $port = "")
     {

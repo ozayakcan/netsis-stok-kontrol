@@ -15,6 +15,9 @@ class Veritabani {
   static const String veritabaniBilgileriStr = "veritabaniBilgileri";
   static const String veritabaniBaglandiStr = "veritabaniBaglandii";
 
+  static const String baslangicStr = "baslangic";
+  static const String ogeSayisiStr = "ogeSayisi";
+
   static Future<String> response({
     required String url,
     Map<String, String>? postVerileri,
@@ -116,23 +119,21 @@ class Veritabani {
   }
 
   static Future<List<StokModel>> stoklariGetir(
-      VeritabaniBilgileriModel? veritabaniBilgileriModel) async {
+    VeritabaniBilgileriModel? veritabaniBilgileriModel, {
+    required int baslangic,
+    required ogeSayisi,
+  }) async {
     if (veritabaniBilgileriModel != null) {
-      try {
-        var res = await list(
-          url: Konumlar.of(veritabaniBilgileriModel.host).stoklar,
-          postVerileri: veritabaniBilgileriModel.toMap(),
-        );
-        if (kDebugMode) {
-          print(res.toString());
-        }
-        return res.map((e) => StokModel.fromJson(e)).toList();
-      } catch (e) {
-        if (kDebugMode) {
-          print("Stoklar alınamadı! Hata: ${e.toString()}");
-        }
-        return [];
-      }
+      Map<String, String> postVerileri = <String, String>{
+        baslangicStr: baslangic.toString(),
+        ogeSayisiStr: ogeSayisi.toString(),
+      };
+      postVerileri.addAll(veritabaniBilgileriModel.toMap());
+      var res = await list(
+        url: Konumlar.of(veritabaniBilgileriModel.host).stoklar,
+        postVerileri: postVerileri,
+      );
+      return res.map((e) => StokModel.fromJson(e)).toList();
     } else {
       if (kDebugMode) {
         print("Stoklar alınamadı! Hata: Model degeri null");

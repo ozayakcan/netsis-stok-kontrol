@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:netsisstok/model.dart/stok.dart';
@@ -20,31 +19,45 @@ class AnaSayfa extends VarsayilanStatefulWidget {
 }
 
 class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
-  bool yukleniyor = false;
+  bool yenileniyor = false;
   bool diyalogDurumu = false;
 
   VeritabaniBilgileriModel? veritabaniBilgileriModel;
 
   List<StokModel> stoklar = [];
 
+  ScrollController stoklarScrollController = ScrollController();
+
+  int yuklenecekOgeIndex = 0;
+  int yuklenecekOgeSayisi = 50;
+
+  bool yukleniyor = false;
+  bool hepsiYuklendi = false;
+
   @override
   void initState() {
     super.initState();
-    init();
+    init(tumunuYenile: true);
+    stoklarScrollController.addListener(() {
+      if (stoklarScrollController.position.pixels >=
+              stoklarScrollController.position.maxScrollExtent &&
+          !yukleniyor &&
+          !yenileniyor) {
+        init(tumunuYenile: false);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     double aramaYukseklik = 80;
+    double yukleniyorYukseklik = 35;
     return Sayfa(
       baslik: "Netsis Stok",
       yenileButonAktif: true,
-      yenileButonAction: (!yukleniyor)
+      yenileButonAction: (!yenileniyor && !yukleniyor)
           ? () async {
-              setState(() {
-                stoklar = [];
-              });
-              init();
+              init(tumunuYenile: true);
             }
           : null,
       icerik: LayoutBuilder(
@@ -62,11 +75,13 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                 top: aramaYukseklik,
                 left: 0,
                 right: 0,
-                bottom: 0,
+                bottom: yukleniyor ? yukleniyorYukseklik : 0,
                 child: Column(
                   children: [
                     Expanded(
                       child: ListView.builder(
+                        controller: stoklarScrollController,
+                        scrollDirection: Axis.vertical,
                         itemCount: stoklar.length,
                         itemBuilder: (context, index) {
                           return Card(
@@ -102,7 +117,7 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                   ],
                 ),
               ),
-              if (yukleniyor)
+              if (yenileniyor)
                 Positioned(
                   top: aramaYukseklik,
                   bottom: 0,
@@ -119,6 +134,22 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                     ),
                   ),
                 ),
+              if (yukleniyor)
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    color: Colors.white38,
+                    height: yukleniyorYukseklik,
+                    child: Center(
+                      child: LoadingAnimationWidget.discreteCircle(
+                        color: Colors.blue,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                ),
             ],
           );
         },
@@ -127,11 +158,23 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
   }
 
   void init({
+    required bool tumunuYenile,
     bool baglan = false,
   }) async {
-    setState(() {
-      yukleniyor = true;
-    });
+    if (tumunuYenile) {
+      setState(() {
+        stoklar = [];
+        yuklenecekOgeIndex = 0;
+        yenileniyor = true;
+      });
+    } else {
+      if (hepsiYuklendi) {
+        return;
+      }
+      setState(() {
+        yukleniyor = true;
+      });
+    }
     try {
       VeritabaniBilgileriModel? veritabaniBilgileriModelTemp =
           await Veritabani.veritabaniBilgileriGetir();
@@ -145,14 +188,21 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
         setState(() {
           veritabaniBilgileriModel = veritabaniBilgileriModelTemp;
         });
-        List<StokModel> stoklarTemp =
-            await Veritabani.stoklariGetir(veritabaniBilgileriModel);
-        if (kDebugMode) {
-          print(stoklarTemp.length);
+        List<StokModel> stoklarTemp = await Veritabani.stoklariGetir(
+          veritabaniBilgileriModel,
+          baslangic: yuklenecekOgeIndex,
+          ogeSayisi: yuklenecekOgeSayisi,
+        );
+        if (stoklarTemp.isEmpty) {
+          setState(() {
+            hepsiYuklendi = true;
+          });
+        } else {
+          setState(() {
+            yuklenecekOgeIndex += yuklenecekOgeSayisi;
+            stoklar.addAll(stoklarTemp);
+          });
         }
-        setState(() {
-          stoklar = stoklarTemp;
-        });
       }
     } catch (e) {
       veritabaniHata(
@@ -160,9 +210,16 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
         text: "Veritabanına baglanilamadı!",
       );
     }
-    setState(() {
-      yukleniyor = false;
-    });
+
+    if (tumunuYenile) {
+      setState(() {
+        yenileniyor = false;
+      });
+    } else {
+      setState(() {
+        yukleniyor = false;
+      });
+    }
   }
 
   void veritabaniHata({
@@ -190,7 +247,7 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                 });
               },
             );
-            init(baglan: baglan);
+            init(tumunuYenile: true, baglan: baglan);
           },
           child: const Text("Tekrar Dene"),
         ),

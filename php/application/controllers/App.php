@@ -15,7 +15,9 @@ class App extends CI_Controller {
     public function stoklar(){
         $this->headerlar();
         $veritabaniPost = $this->App_Model->veritabaniPost();
-        $stoklar = $this->App_Model->stoklar($veritabaniPost[$this->App_Model->hostStr], $veritabaniPost[$this->App_Model->veritabaniAdiStr], $veritabaniPost[$this->App_Model->kullaniciAdiStr], $veritabaniPost[$this->App_Model->sifreStr]);
+        $baslangic = $this->input->post($this->App_Model->baslangicStr);
+        $ogeSayisi = $this->input->post($this->App_Model->ogeSayisiStr);
+        $stoklar = $this->App_Model->stoklar($veritabaniPost[$this->App_Model->hostStr], $veritabaniPost[$this->App_Model->veritabaniAdiStr], $veritabaniPost[$this->App_Model->kullaniciAdiStr], $veritabaniPost[$this->App_Model->sifreStr], $baslangic, $ogeSayisi);
         echo $this->App_Model->turkceKarakter(json_encode($stoklar));
     }
     public function stokHareket(){
