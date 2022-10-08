@@ -29,10 +29,6 @@ class Veritabani {
           "GET, POST, OPTIONS, DELETE, PUT",
       HttpHeaders.accessControlMaxAgeHeader: "86400",
     };
-    var body = json.encode(postVerileri);
-    if (kDebugMode) {
-      print("Body: $body");
-    }
     var response = await http.post(
       Uri.parse(url),
       headers: headers,
