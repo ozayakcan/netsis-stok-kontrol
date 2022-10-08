@@ -37,6 +37,19 @@ class VeritabaniKaydetState
   bool diyalogGosterildi = false;
 
   @override
+  void initState() {
+    super.initState();
+    Veritabani.veritabaniBilgileriGetir().then((value) {
+      if (value != null) {
+        ipController.text = value.ip;
+        adController.text = value.veritabani;
+        kullaniciAdiController.text = value.kullaniciAdi;
+        sifreController.text = value.sifre;
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final tamGenislik = MediaQuery.of(context).size.width;
     final genislik = tamGenislik >= gerekliGenislik
@@ -183,11 +196,12 @@ class VeritabaniKaydetState
             if (kDebugMode) {
               print("Veritabani kaydedildi");
             }
-            Navigator.pushReplacement(
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
                 builder: (context) => const AnaSayfa(),
               ),
+              (route) => false,
             );
           },
         );
