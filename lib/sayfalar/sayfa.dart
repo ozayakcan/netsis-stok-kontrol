@@ -7,10 +7,14 @@ class Sayfa extends StatelessWidget {
     this.appBarGoster = true,
     this.baslik = "",
     required this.icerik,
+    this.yenileButonAction,
+    this.yenileButonAktif = false,
   });
   final bool appBarGoster;
   final String baslik;
   final Widget icerik;
+  final VoidCallback? yenileButonAction;
+  final bool yenileButonAktif;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,6 +23,13 @@ class Sayfa extends StatelessWidget {
               toolbarHeight: 55,
               title: Text(baslik),
               actions: [
+                if (yenileButonAktif)
+                  IconButton(
+                    onPressed: yenileButonAction,
+                    icon: const Icon(
+                      Icons.refresh_outlined,
+                    ),
+                  ),
                 PopupMenuButton(
                   elevation: 2,
                   offset: const Offset(0, 55),

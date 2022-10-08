@@ -26,6 +26,7 @@ class MaterialAppWidget extends StatelessWidget {
           900: Color.fromRGBO(52, 58, 64, 1),
         }),
         scaffoldBackgroundColor: Colors.white,
+        disabledColor: Colors.white54,
       ),
       home: home,
     );

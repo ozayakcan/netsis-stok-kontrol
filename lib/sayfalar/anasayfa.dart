@@ -38,6 +38,15 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
     double aramaYukseklik = 80;
     return Sayfa(
       baslik: "Netsis Stok",
+      yenileButonAktif: true,
+      yenileButonAction: (!yukleniyor)
+          ? () async {
+              setState(() {
+                stoklar = [];
+              });
+              init();
+            }
+          : null,
       icerik: LayoutBuilder(
         builder: (context, constraints) {
           return Stack(
