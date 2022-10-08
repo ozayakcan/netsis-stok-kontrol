@@ -87,22 +87,34 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                           return Card(
                             child: Column(
                               children: [
+                                if (index == 0)
+                                  const Divider(color: Colors.black),
                                 InkWell(
                                   child: Column(
                                     children: [
-                                      Row(
-                                        children: [
-                                          const Text("STOK KODU:"),
-                                          Text(stoklar[index].stokKodu),
-                                        ],
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: Wrap(
+                                          alignment: WrapAlignment.start,
+                                          runAlignment: WrapAlignment.start,
+                                          children: [
+                                            const Text("STOK KODU: "),
+                                            Text(stoklar[index].stokKodu),
+                                          ],
+                                        ),
                                       ),
-                                      Row(
-                                        children: [
-                                          const Text("STOK ADI:"),
-                                          Text(
-                                            stoklar[index].stokAdi,
-                                          ),
-                                        ],
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: Wrap(
+                                          alignment: WrapAlignment.start,
+                                          runAlignment: WrapAlignment.start,
+                                          children: [
+                                            const Text("STOK ADI: "),
+                                            Text(
+                                              stoklar[index].stokAdi,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
