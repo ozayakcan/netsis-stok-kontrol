@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:sql_conn/sql_conn.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:netsisstok/model.dart/stok.dart';
 
 import '../model.dart/veritabani_bilgileri.dart';
 import '../veritabani/veritabani.dart';
@@ -22,18 +23,75 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
   bool yukleniyor = false;
   bool diyalogDurumu = false;
 
+  VeritabaniBilgileriModel? veritabaniBilgileriModel;
+
+  List<StokModel> stoklar = [];
+
   @override
   void initState() {
     super.initState();
-    init(baglan: !SqlConn.isConnected);
+    init();
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Sayfa(
+    double aramaYukseklik = 80;
+    return Sayfa(
       baslik: "Netsis Stok",
-      icerik: Center(
-        child: Text("Anasayfa"),
+      icerik: LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
+            children: [
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: SizedBox(
+                    height: aramaYukseklik, child: const Text("Arama")),
+              ),
+              Positioned(
+                top: aramaYukseklik,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: ListView.separated(
+                        itemCount: stoklar.length,
+                        separatorBuilder: (context, index) {
+                          return const Divider(
+                            height: 1,
+                          );
+                        },
+                        itemBuilder: (context, index) {
+                          return Text(stoklar[index].stokKodu);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (yukleniyor)
+                Positioned(
+                  top: aramaYukseklik,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    color: Colors.white38,
+                    child: Center(
+                      child: LoadingAnimationWidget.twistingDots(
+                        leftDotColor: Colors.blue,
+                        rightDotColor: Colors.red,
+                        size: 70,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -44,39 +102,37 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
     setState(() {
       yukleniyor = true;
     });
-    if (baglan) {
-      VeritabaniBilgileriModel? veritabaniBilgileriModel =
+    try {
+      VeritabaniBilgileriModel? veritabaniBilgileriModelTemp =
           await Veritabani.veritabaniBilgileriGetir();
-      if (veritabaniBilgileriModel == null) {
+      if (veritabaniBilgileriModelTemp == null) {
         veritabaniHata(
           baglan: baglan,
           text: "Veritabanı bilgileri alınamadı!",
         );
+        return;
       } else {
-        bool durum = await Veritabani.baglan(
-            veritabaniBilgileriModel: veritabaniBilgileriModel);
-        if (!durum) {
-          veritabaniHata(
-            baglan: baglan,
-            text: "Veritabanına bağlanılamadı!",
-          );
-        } else {
-          if (kDebugMode) {
-            print("Veritabanına bağlandı");
-          }
-          await bilgileriGetir();
+        setState(() {
+          veritabaniBilgileriModel = veritabaniBilgileriModelTemp;
+        });
+        List<StokModel> stoklarTemp =
+            await Veritabani.stoklariGetir(veritabaniBilgileriModel);
+        if (kDebugMode) {
+          print(stoklarTemp.length);
         }
+        setState(() {
+          stoklar = stoklarTemp;
+        });
       }
-    } else {
-      await bilgileriGetir();
+    } catch (e) {
+      veritabaniHata(
+        baglan: baglan,
+        text: "Veritabanına baglanilamadı!",
+      );
     }
     setState(() {
       yukleniyor = false;
     });
-  }
-
-  Future<void> bilgileriGetir() async {
-    // TODO Stokları çekme eklenecek.
   }
 
   void veritabaniHata({

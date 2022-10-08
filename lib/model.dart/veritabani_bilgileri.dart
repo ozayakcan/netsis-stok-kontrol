@@ -1,20 +1,25 @@
 class VeritabaniBilgileriModel {
   VeritabaniBilgileriModel({
-    required this.ip,
-    required this.veritabani,
+    required this.host,
+    required this.veritabaniAdi,
     required this.kullaniciAdi,
     required this.sifre,
   });
-  final String ip;
-  final String veritabani;
+  final String host;
+  final String veritabaniAdi;
   final String kullaniciAdi;
   final String sifre;
+
+  static String hostStr = "host";
+  static String veritabaniAdiStr = "veritabaniAdi";
+  static String kullaniciAdiStr = "kullaniciAdi";
+  static String sifreStr = "sifre";
 
   static VeritabaniBilgileriModel? fromList(List<String> liste) {
     if (liste.length >= 4) {
       return VeritabaniBilgileriModel(
-        ip: liste[0],
-        veritabani: liste[1],
+        host: liste[0],
+        veritabaniAdi: liste[1],
         kullaniciAdi: liste[2],
         sifre: liste[3],
       );
@@ -25,10 +30,19 @@ class VeritabaniBilgileriModel {
 
   List<String> toList() {
     return [
-      ip,
-      veritabani,
+      host,
+      veritabaniAdi,
       kullaniciAdi,
       sifre,
     ];
+  }
+
+  Map<String, String> toMap() {
+    return <String, String>{
+      hostStr: host,
+      veritabaniAdiStr: veritabaniAdi,
+      kullaniciAdiStr: kullaniciAdi,
+      sifreStr: sifre,
+    };
   }
 }

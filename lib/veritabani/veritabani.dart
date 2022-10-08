@@ -1,6 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
+import 'package:netsisstok/model.dart/stok.dart';
+import 'package:netsisstok/veritabani/konumlar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sql_conn/sql_conn.dart';
+import 'package:http/http.dart' as http;
 
 import '../model.dart/veritabani_bilgileri.dart';
 
@@ -10,24 +15,54 @@ class Veritabani {
   static const String veritabaniBilgileriStr = "veritabaniBilgileri";
   static const String veritabaniBaglandiStr = "veritabaniBaglandii";
 
-  static Future<bool> baglan({
-    required VeritabaniBilgileriModel veritabaniBilgileriModel,
+  static Future<String> response({
+    required String url,
+    Map<String, String>? postVerileri,
   }) async {
-    try {
-      await SqlConn.connect(
-        ip: veritabaniBilgileriModel.ip,
-        port: "1433",
-        databaseName: veritabaniBilgileriModel.veritabani,
-        username: veritabaniBilgileriModel.kullaniciAdi,
-        password: veritabaniBilgileriModel.sifre,
-      );
-      return true;
-    } catch (e) {
-      if (kDebugMode) {
-        print("Veritabanına Bağlanılamadı! Hata: ${e.toString()}");
-      }
-      return false;
+    final headers = {
+      HttpHeaders.accessControlAllowOriginHeader: "*",
+      HttpHeaders.accessControlAllowCredentialsHeader: "true",
+      HttpHeaders.accessControlAllowMethodsHeader:
+          "GET, POST, OPTIONS, DELETE, PUT",
+      HttpHeaders.accessControlMaxAgeHeader: "86400",
+    };
+    var body = json.encode(postVerileri);
+    if (kDebugMode) {
+      print("Body: $body");
     }
+    var response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: postVerileri,
+    );
+    if (kDebugMode) {
+      print(response.body);
+    }
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return "";
+    }
+  }
+
+  static Future<Map<String, dynamic>> map({
+    required String url,
+    Map<String, String>? postVerileri,
+  }) async {
+    return json.decode(await response(
+      url: url,
+      postVerileri: postVerileri,
+    ));
+  }
+
+  static Future<List> list({
+    required String url,
+    Map<String, String>? postVerileri,
+  }) async {
+    return json.decode(await response(
+      url: url,
+      postVerileri: postVerileri,
+    ));
   }
 
   static Future<void> veritabaniBilgileriKaydet({
@@ -38,19 +73,11 @@ class Veritabani {
   }) async {
     beforeSave?.call();
     try {
-      bool durum =
-          await baglan(veritabaniBilgileriModel: veritabaniBilgileriModel);
-      if (durum) {
-        SharedPreferences sharedPreferences =
-            await SharedPreferences.getInstance();
-        sharedPreferences.setStringList(
-            veritabaniBilgileriStr, veritabaniBilgileriModel.toList());
-        onSaveSuccess?.call();
-      } else {
-        onSaveError?.call(
-          "Veritabanına bağlanılamadı! Lütfen bilgileri kontrol edip tekrar deneyin!",
-        );
-      }
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      sharedPreferences.setStringList(
+          veritabaniBilgileriStr, veritabaniBilgileriModel.toList());
+      onSaveSuccess?.call();
     } catch (e) {
       if (kDebugMode) {
         print("Veritabanı Bilgileri Kaydedilemedi! Hata: ${e.toString()}");
@@ -85,6 +112,32 @@ class Veritabani {
         print("Veritabanı Bilgileri Alınamadı! Hata: ${e.toString()}");
       }
       return null;
+    }
+  }
+
+  static Future<List<StokModel>> stoklariGetir(
+      VeritabaniBilgileriModel? veritabaniBilgileriModel) async {
+    if (veritabaniBilgileriModel != null) {
+      try {
+        var res = await list(
+          url: Konumlar.of(veritabaniBilgileriModel.host).stoklar,
+          postVerileri: veritabaniBilgileriModel.toMap(),
+        );
+        if (kDebugMode) {
+          print(res.toString());
+        }
+        return res.map((e) => StokModel.fromJson(e)).toList();
+      } catch (e) {
+        if (kDebugMode) {
+          print("Stoklar alınamadı! Hata: ${e.toString()}");
+        }
+        return [];
+      }
+    } else {
+      if (kDebugMode) {
+        print("Stoklar alınamadı! Hata: Model degeri null");
+      }
+      return [];
     }
   }
 }

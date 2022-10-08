@@ -20,8 +20,8 @@ class VeritabaniKaydet extends VarsayilanStatefulWidget {
 
 class VeritabaniKaydetState
     extends VarsayilanStatefulWidgetState<VeritabaniKaydet> {
-  final TextEditingController ipController = TextEditingController();
-  final TextEditingController adController = TextEditingController();
+  final TextEditingController hostController = TextEditingController();
+  final TextEditingController veritabaniAdiController = TextEditingController();
   final TextEditingController kullaniciAdiController = TextEditingController();
   final TextEditingController sifreController = TextEditingController();
 
@@ -41,8 +41,8 @@ class VeritabaniKaydetState
     super.initState();
     Veritabani.veritabaniBilgileriGetir().then((value) {
       if (value != null) {
-        ipController.text = value.ip;
-        adController.text = value.veritabani;
+        hostController.text = value.host;
+        veritabaniAdiController.text = value.veritabaniAdi;
         kullaniciAdiController.text = value.kullaniciAdi;
         sifreController.text = value.sifre;
       }
@@ -86,7 +86,7 @@ class VeritabaniKaydetState
               TextFieldDef(
                 width: genislik,
                 height: 50,
-                textController: ipController,
+                textController: hostController,
                 currentFocus: ipFocus,
                 nextFocus: adFocus,
                 onChanged: (value) {
@@ -102,7 +102,7 @@ class VeritabaniKaydetState
               TextFieldDef(
                 width: genislik,
                 height: 50,
-                textController: adController,
+                textController: veritabaniAdiController,
                 currentFocus: adFocus,
                 nextFocus: kullaniciAdiFocus,
                 onChanged: (value) {
@@ -169,8 +169,8 @@ class VeritabaniKaydetState
   Future<void> bilgileriKaydet() async {
     await Veritabani.veritabaniBilgileriKaydet(
       veritabaniBilgileriModel: VeritabaniBilgileriModel(
-        ip: ipController.text,
-        veritabani: adController.text,
+        host: hostController.text,
+        veritabaniAdi: veritabaniAdiController.text,
         kullaniciAdi: kullaniciAdiController.text,
         sifre: sifreController.text,
       ),
