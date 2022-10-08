@@ -66,15 +66,36 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                 child: Column(
                   children: [
                     Expanded(
-                      child: ListView.separated(
+                      child: ListView.builder(
                         itemCount: stoklar.length,
-                        separatorBuilder: (context, index) {
-                          return const Divider(
-                            height: 1,
-                          );
-                        },
                         itemBuilder: (context, index) {
-                          return Text(stoklar[index].stokKodu);
+                          return Card(
+                            child: Column(
+                              children: [
+                                InkWell(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          const Text("STOK KODU:"),
+                                          Text(stoklar[index].stokKodu),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Text("STOK ADI:"),
+                                          Text(
+                                            stoklar[index].stokAdi,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const Divider(color: Colors.black),
+                              ],
+                            ),
+                          );
                         },
                       ),
                     ),
