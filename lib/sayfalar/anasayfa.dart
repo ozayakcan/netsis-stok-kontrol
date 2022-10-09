@@ -28,6 +28,8 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
 
   ScrollController stoklarScrollController = ScrollController();
 
+  TextEditingController aramaController = TextEditingController();
+
   int yuklenecekOgeIndex = 0;
   int yuklenecekOgeSayisi = 50;
 
@@ -50,7 +52,7 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
 
   @override
   Widget build(BuildContext context) {
-    double aramaYukseklik = 80;
+    double aramaYukseklik = 50;
     double yukleniyorYukseklik = 35;
     return Sayfa(
       baslik: "Netsis Stok",
@@ -69,7 +71,12 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                 left: 0,
                 right: 0,
                 child: SizedBox(
-                    height: aramaYukseklik, child: const Text("Arama")),
+                  height: aramaYukseklik,
+                  child: TextField(
+                    controller: aramaController,
+                    decoration: const InputDecoration(hintText: "Ara"),
+                  ),
+                ),
               ),
               Positioned(
                 top: aramaYukseklik,
