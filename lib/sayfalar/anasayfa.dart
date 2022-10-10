@@ -52,6 +52,13 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    stoklarScrollController.dispose();
+    aramaController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double aramaYukseklik = 50;
     double yukleniyorYukseklik = 35;
