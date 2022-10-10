@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:netsisstok/model.dart/stok.dart';
+import 'package:netsisstok/widgetlar/formlar.dart';
 
 import '../model.dart/veritabani_bilgileri.dart';
 import '../veritabani/veritabani.dart';
@@ -29,13 +30,15 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
 
   ScrollController stoklarScrollController = ScrollController();
 
-  TextEditingController aramaController = TextEditingController();
-
   int yuklenecekOgeIndex = 0;
   int yuklenecekOgeSayisi = 50;
 
   bool yukleniyor = false;
   bool hepsiYuklendi = false;
+
+  TextEditingController aramaController = TextEditingController();
+  String aramaText = "";
+  int aramaMinKarakter = 3;
 
   @override
   void initState() {
@@ -80,9 +83,22 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                 right: 0,
                 child: SizedBox(
                   height: aramaYukseklik,
-                  child: TextField(
-                    controller: aramaController,
-                    decoration: const InputDecoration(hintText: "Ara"),
+                  child: TextFieldDef(
+                    width: MediaQuery.of(context).size.width,
+                    textController: aramaController,
+                    hintText: "Ara",
+                    inputFormatters: [
+                      BuyukHarfFormatter(),
+                    ],
+                    suffixIcon: TextFieldIconDef(
+                      icon: Icons.search,
+                      onPressed: () {
+                        ara();
+                      },
+                    ),
+                    onSubmit: () {
+                      ara();
+                    },
                   ),
                 ),
               ),
@@ -217,6 +233,7 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
         });
         List<StokModel> stoklarTemp = await Veritabani.stoklariGetir(
           veritabaniBilgileriModel,
+          arama: aramaText.isNotEmpty ? aramaText : null,
           baslangic: yuklenecekOgeIndex,
           ogeSayisi: yuklenecekOgeSayisi,
         );
@@ -294,5 +311,12 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
         ),
       ],
     );
+  }
+
+  void ara() {
+    setState(() {
+      aramaText = aramaController.text;
+    });
+    init(tumunuYenile: true);
   }
 }

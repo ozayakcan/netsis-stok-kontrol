@@ -17,6 +17,7 @@ class Veritabani {
 
   static const String baslangicStr = "baslangic";
   static const String ogeSayisiStr = "ogeSayisi";
+  static const String araStr = "ara";
 
   static Future<String> response({
     required String url,
@@ -118,6 +119,7 @@ class Veritabani {
     VeritabaniBilgileriModel? veritabaniBilgileriModel, {
     required int baslangic,
     required ogeSayisi,
+    String? arama,
   }) async {
     if (veritabaniBilgileriModel != null) {
       Map<String, String> postVerileri = <String, String>{
@@ -125,6 +127,11 @@ class Veritabani {
         ogeSayisiStr: ogeSayisi.toString(),
       };
       postVerileri.addAll(veritabaniBilgileriModel.toMap());
+      if (arama != null) {
+        postVerileri.addAll(<String, String>{
+          araStr: arama,
+        });
+      }
       var res = await list(
         url: Konumlar.of(veritabaniBilgileriModel.host).stoklar,
         postVerileri: postVerileri,

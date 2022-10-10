@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:turkish/turkish.dart';
 
 import '../sayfalar/stfl_widget.dart';
 
@@ -16,6 +18,7 @@ class TextFieldDef extends VarsayilanStatefulWidget {
     this.labelText,
     this.hintText,
     this.inputType,
+    this.inputFormatters,
     this.isPassword = false,
     this.maxLength,
     this.maxHeight,
@@ -28,6 +31,7 @@ class TextFieldDef extends VarsayilanStatefulWidget {
     this.autofillHints,
     this.isMultiline = false,
     this.rounded = false,
+    this.suffixIcon,
   });
 
   final bool backgroundEnabled;
@@ -37,6 +41,7 @@ class TextFieldDef extends VarsayilanStatefulWidget {
   final String? labelText;
   final String? hintText;
   final TextInputType? inputType;
+  final List<TextInputFormatter>? inputFormatters;
   final bool isPassword;
   final int? maxLength;
   final double? maxHeight;
@@ -49,6 +54,7 @@ class TextFieldDef extends VarsayilanStatefulWidget {
   final Iterable<String>? autofillHints;
   final bool isMultiline;
   final bool rounded;
+  final Widget? suffixIcon;
 
   @override
   State<TextFieldDef> createState() => _TextFieldDefState();
@@ -87,6 +93,7 @@ class _TextFieldDefState extends VarsayilanStatefulWidgetState<TextFieldDef> {
           : widget.isMultiline
               ? null
               : TextInputAction.done,
+      inputFormatters: widget.inputFormatters,
       textAlignVertical:
           widget.rounded ? TextAlignVertical.center : TextAlignVertical.bottom,
       style: const TextStyle(
@@ -108,18 +115,15 @@ class _TextFieldDefState extends VarsayilanStatefulWidgetState<TextFieldDef> {
         enabledBorder: !widget.rounded ? underlineInputBorder() : null,
         focusedBorder: !widget.rounded ? underlineInputBorder() : null,
         suffixIcon: widget.isPassword
-            ? IconButton(
-                icon: Icon(
-                  passwordVisible ? Icons.visibility : Icons.visibility_off,
-                ),
-                color: Colors.black,
+            ? TextFieldIconDef(
+                icon: passwordVisible ? Icons.visibility : Icons.visibility_off,
                 onPressed: () {
                   setState(() {
                     passwordVisible = !passwordVisible;
                   });
                 },
               )
-            : null,
+            : widget.suffixIcon,
       ),
       onSubmitted: widget.onSubmit == null && widget.nextFocus == null
           ? null
@@ -173,4 +177,35 @@ InputBorder underlineInputBorder() {
       width: 0.0,
     ),
   );
+}
+
+class TextFieldIconDef extends StatelessWidget {
+  const TextFieldIconDef({
+    super.key,
+    required this.icon,
+    this.onPressed,
+  });
+
+  final IconData icon;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(icon),
+      color: Colors.black,
+      onPressed: onPressed,
+    );
+  }
+}
+
+class BuyukHarfFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(
+      text: newValue.text.toUpperCaseTr(),
+      selection: newValue.selection,
+    );
+  }
 }
