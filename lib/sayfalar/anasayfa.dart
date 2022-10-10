@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:netsisstok/model.dart/stok.dart';
@@ -228,6 +229,9 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
         baglan: baglan,
         text: "Veritabanına baglanilamadı!",
       );
+      if (kDebugMode) {
+        print("Veritabanına baglanilamadı! Hata: ${e.toString()}");
+      }
     }
 
     if (tumunuYenile) {
