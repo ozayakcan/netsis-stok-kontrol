@@ -209,6 +209,7 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
         stoklar = [];
         yuklenecekOgeIndex = 0;
         yenileniyor = true;
+        hepsiYuklendi = false;
       });
     } else {
       if (hepsiYuklendi) {
@@ -237,11 +238,12 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
           baslangic: yuklenecekOgeIndex,
           ogeSayisi: yuklenecekOgeSayisi,
         );
-        if (stoklarTemp.isEmpty) {
+        if (stoklarTemp.length < yuklenecekOgeSayisi) {
           setState(() {
             hepsiYuklendi = true;
           });
-        } else {
+        }
+        if (stoklarTemp.isNotEmpty) {
           setState(() {
             yuklenecekOgeIndex += yuklenecekOgeSayisi;
             stoklar.addAll(stoklarTemp);
