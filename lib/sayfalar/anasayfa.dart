@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:netsisstok/model.dart/stok.dart';
+import 'package:netsisstok/veritabani/degiskenler.dart';
 import 'package:netsisstok/widgetlar/formlar.dart';
 
 import '../model.dart/veritabani_bilgileri.dart';
@@ -143,6 +144,71 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                                             const Text("STOK ADI: "),
                                             Text(
                                               stoklar[index].stokAdi,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: Wrap(
+                                          alignment: WrapAlignment.start,
+                                          runAlignment: WrapAlignment.start,
+                                          children: [
+                                            const Text("MİKTAR: "),
+                                            Text(
+                                              stoklar[index].miktar.toString(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: Wrap(
+                                          alignment: WrapAlignment.start,
+                                          runAlignment: WrapAlignment.start,
+                                          children: [
+                                            const Text("ÖLÇÜ BİRİMİ: "),
+                                            Text(
+                                              "${stoklar[index].olcuBr1}${(stoklar[index].olcuBr2.isNotEmpty ? ", ${stoklar[index].olcuBr2}" : "")}${(stoklar[index].olcuBr3.isNotEmpty ? ", ${stoklar[index].olcuBr3}" : "")}",
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: Wrap(
+                                          alignment: WrapAlignment.start,
+                                          runAlignment: WrapAlignment.start,
+                                          children: [
+                                            const Text("ALIŞ FİYATI: "),
+                                            Text(
+                                              "${(stoklar[index].alisFiat1 > Degiskenler.parseDecimal() ? stoklar[index].alisFiat1.toString() : "0")}${(stoklar[index].alisFiat2 > Degiskenler.parseDecimal() ? ", ${stoklar[index].alisFiat2.toString()}" : "")}${(stoklar[index].alisFiat3 > Degiskenler.parseDecimal() ? ", ${stoklar[index].alisFiat3.toString()}" : "")}${(stoklar[index].alisFiat4 > Degiskenler.parseDecimal() ? ", ${stoklar[index].alisFiat4.toString()}" : "")}",
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: Wrap(
+                                          alignment: WrapAlignment.start,
+                                          runAlignment: WrapAlignment.start,
+                                          children: [
+                                            const Text("SATIŞ FİYATI: "),
+                                            Text(
+                                              "${(stoklar[index].satisFiat1 > Degiskenler.parseDecimal() ? stoklar[index].satisFiat1.toString() : "0")}${(stoklar[index].satisFiat2 > Degiskenler.parseDecimal() ? ", ${stoklar[index].satisFiat2.toString()}" : "")}${(stoklar[index].satisFiat3 > Degiskenler.parseDecimal() ? ", ${stoklar[index].satisFiat3.toString()}" : "")}${(stoklar[index].satisFiat4 > Degiskenler.parseDecimal() ? ", ${stoklar[index].satisFiat4.toString()}" : "")}",
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: Wrap(
+                                          alignment: WrapAlignment.start,
+                                          runAlignment: WrapAlignment.start,
+                                          children: [
+                                            const Text("KDV: "),
+                                            Text(
+                                              "%${stoklar[index].kdvOrani.toString()}",
                                             ),
                                           ],
                                         ),
