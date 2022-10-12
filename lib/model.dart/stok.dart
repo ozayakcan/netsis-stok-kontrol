@@ -13,8 +13,8 @@ class StokModel {
 
   factory StokModel.fromJson(Map<String, dynamic> jsonData) {
     return StokModel(
-      stokKodu: Degiskenler.parseString(yazi: jsonData[stokKoduStr]),
-      stokAdi: Degiskenler.parseString(yazi: jsonData[stokAdiStr]),
+      stokKodu: Degiskenler.parseString(degisken: jsonData[stokKoduStr]),
+      stokAdi: Degiskenler.parseString(degisken: jsonData[stokAdiStr]),
     );
   }
 }
