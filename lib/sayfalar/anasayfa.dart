@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:netsisstok/model.dart/stok.dart';
-import 'package:netsisstok/veritabani/degiskenler.dart';
-import 'package:netsisstok/widgetlar/formlar.dart';
 
+import '../model.dart/stok.dart';
 import '../model.dart/veritabani_bilgileri.dart';
+import '../veritabani/degiskenler.dart';
 import '../veritabani/veritabani.dart';
 import '../widgetlar/diyalog.dart';
+import '../widgetlar/formlar.dart';
 import 'sayfa.dart';
 import 'stfl_widget.dart';
 import 'veritabani_kaydet.dart';
@@ -37,7 +37,7 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
   bool yukleniyor = false;
   bool hepsiYuklendi = false;
 
-  TextEditingController aramaController = TextEditingController();
+  TextEditingController araController = TextEditingController();
   String aramaText = "";
   int aramaMinKarakter = 3;
 
@@ -59,7 +59,7 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
   void dispose() {
     super.dispose();
     stoklarScrollController.dispose();
-    aramaController.dispose();
+    araController.dispose();
   }
 
   @override
@@ -78,33 +78,31 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
         builder: (context, constraints) {
           return Stack(
             children: [
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: SizedBox(
-                  height: aramaYukseklik,
-                  child: TextFieldDef(
-                    width: MediaQuery.of(context).size.width,
-                    textController: aramaController,
-                    hintText: "Ara",
-                    inputFormatters: [
-                      BuyukHarfFormatter(),
-                    ],
-                    suffixIcon: TextFieldIconDef(
-                      icon: Icons.search,
-                      onPressed: () {
+              if (!yenileniyor)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: SizedBox(
+                    height: aramaYukseklik,
+                    child: TextFieldDef(
+                      width: MediaQuery.of(context).size.width,
+                      textController: araController,
+                      hintText: "Ara",
+                      suffixIcon: TextFieldIconDef(
+                        icon: Icons.search,
+                        onPressed: () {
+                          ara();
+                        },
+                      ),
+                      onSubmit: () {
                         ara();
                       },
                     ),
-                    onSubmit: () {
-                      ara();
-                    },
                   ),
                 ),
-              ),
               Positioned(
-                top: aramaYukseklik,
+                top: yenileniyor ? 0 : aramaYukseklik,
                 left: 0,
                 right: 0,
                 bottom: yukleniyor ? yukleniyorYukseklik : 0,
@@ -383,7 +381,7 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
 
   void ara() {
     setState(() {
-      aramaText = aramaController.text;
+      aramaText = araController.text;
     });
     init(tumunuYenile: true);
   }

@@ -2,12 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:netsisstok/model.dart/stok.dart';
-import 'package:netsisstok/veritabani/konumlar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:turkish/turkish.dart';
 
+import '../model.dart/stok.dart';
 import '../model.dart/veritabani_bilgileri.dart';
+import 'konumlar.dart';
 
 typedef OnSaveError = void Function(String hata);
 
@@ -129,7 +130,7 @@ class Veritabani {
       postVerileri.addAll(veritabaniBilgileriModel.toMap());
       if (arama != null) {
         postVerileri.addAll(<String, String>{
-          araStr: arama,
+          araStr: arama.toUpperCaseTr(),
         });
       }
       var res = await list(
