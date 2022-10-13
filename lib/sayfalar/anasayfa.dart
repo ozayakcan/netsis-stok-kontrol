@@ -68,7 +68,7 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
     double aramaYukseklik = 50;
     double yukleniyorYukseklik = 35;
     return Sayfa(
-      baslik: "Netsis Stok",
+      baslik: "Stok Kontrolü",
       yenileButonAktif: true,
       yenileButonAction: (!yenileniyor && !yukleniyor)
           ? () async {

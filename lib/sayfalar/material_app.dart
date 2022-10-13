@@ -10,7 +10,7 @@ class MaterialAppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Netsis Stok",
+      title: "Stok Kontrolü",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: const MaterialColor(0xFF343A40, {
