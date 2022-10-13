@@ -369,19 +369,4 @@ class StokHareketModel {
       otvfiyat: Degiskenler.parseDecimal(degisken: jsonData[otvfiyatStr]),
     );
   }
-  String stharTarihiDuzen({
-    bool saatiGoster = true,
-  }) {
-    // Veritabanı örnek tarih 2015-05-28 10:04:30.000
-    if (stharTarih.length >= 16) {
-      String yil = stharTarih.substring(0, 4);
-      String ay = stharTarih.substring(5, 7);
-      String gun = stharTarih.substring(8, 10);
-      String saat = stharTarih.substring(11, 13);
-      String dakika = stharTarih.substring(14, 16);
-      return "$gun.$ay.$yil${saatiGoster ? " $saat:$dakika" : ""}";
-    } else {
-      return stharTarih;
-    }
-  }
 }

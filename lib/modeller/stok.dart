@@ -699,17 +699,4 @@ class StokModel {
           Degiskenler.parseString(degisken: jsonData[ambarcikisyeriStr]),
     );
   }
-  String kayitTarihiDuzen() {
-    // Veritabanı örnek tarih 2015-05-28 10:04:30.000
-    if (kayittarihi.length >= 16) {
-      String yil = kayittarihi.substring(0, 4);
-      String ay = kayittarihi.substring(5, 7);
-      String gun = kayittarihi.substring(8, 10);
-      String saat = kayittarihi.substring(11, 13);
-      String dakika = kayittarihi.substring(14, 16);
-      return "$gun.$ay.$yil $saat:$dakika";
-    } else {
-      return kayittarihi;
-    }
-  }
 }

@@ -229,7 +229,10 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                                           children: [
                                             const Text("KAYIT TARİHİ: "),
                                             Text(
-                                              stoklar[index].kayitTarihiDuzen(),
+                                              Veritabani.mssqlTarih(
+                                                tarih:
+                                                    stoklar[index].kayittarihi,
+                                              ),
                                             ),
                                           ],
                                         ),

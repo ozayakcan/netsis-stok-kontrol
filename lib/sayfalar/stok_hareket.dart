@@ -146,9 +146,13 @@ class StokHareketleriState
                                           runAlignment: WrapAlignment.start,
                                           children: [
                                             const Text("TARİH: "),
-                                            Text(stokHareketleri[index]
-                                                .stharTarihiDuzen(
-                                                    saatiGoster: false)),
+                                            Text(
+                                              Veritabani.mssqlTarih(
+                                                tarih: stokHareketleri[index]
+                                                    .stharTarih,
+                                                saatiGoster: false,
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),

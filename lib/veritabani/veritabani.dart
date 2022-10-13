@@ -179,4 +179,20 @@ class Veritabani {
       return [];
     }
   }
+
+  static String mssqlTarih({
+    required String tarih,
+    bool saatiGoster = true,
+  }) {
+    if (tarih.length >= 16) {
+      String yil = tarih.substring(0, 4);
+      String ay = tarih.substring(5, 7);
+      String gun = tarih.substring(8, 10);
+      String saat = tarih.substring(11, 13);
+      String dakika = tarih.substring(14, 16);
+      return "$gun.$ay.$yil${saatiGoster ? " $saat:$dakika" : ""}";
+    } else {
+      return tarih;
+    }
+  }
 }
