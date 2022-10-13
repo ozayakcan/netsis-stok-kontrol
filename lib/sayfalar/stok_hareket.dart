@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-import '../model.dart/stok_hareket.dart';
-import '../model.dart/veritabani_bilgileri.dart';
+import '../modeller/stok_hareket.dart';
+import '../modeller/veritabani_bilgileri.dart';
 import '../veritabani/veritabani.dart';
 import '../widgetlar/diyalog.dart';
 import '../widgetlar/formlar.dart';

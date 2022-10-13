@@ -1,5 +1,6 @@
 import 'package:decimal/decimal.dart';
-import 'package:netsisstok/veritabani/degiskenler.dart';
+
+import '../veritabani/degiskenler.dart';
 
 class StokModel {
   StokModel({

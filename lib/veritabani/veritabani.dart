@@ -6,9 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:turkish/turkish.dart';
 
-import '../model.dart/stok.dart';
-import '../model.dart/stok_hareket.dart';
-import '../model.dart/veritabani_bilgileri.dart';
+import '../modeller/stok.dart';
+import '../modeller/stok_hareket.dart';
+import '../modeller/veritabani_bilgileri.dart';
 import 'konumlar.dart';
 
 typedef OnSaveError = void Function(String hata);

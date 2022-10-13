@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../model.dart/veritabani_bilgileri.dart';
+import '../modeller/veritabani_bilgileri.dart';
 import '../veritabani/veritabani.dart';
 import '../widgetlar/butonlar.dart';
 import '../widgetlar/diyalog.dart';
