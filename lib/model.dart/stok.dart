@@ -130,6 +130,44 @@ class StokModel {
     required this.sbomvarmi,
     required this.baglistokkod,
     required this.yapkod,
+    required this.tur,
+    required this.mgrup,
+    required this.kayittarihi,
+    required this.kayityapankul,
+    required this.duzeltmetarihi,
+    required this.duzeltmeyapankul,
+    required this.ingisim,
+    required this.birimMaliyet,
+    required this.kull1n,
+    required this.kull2n,
+    required this.kull3n,
+    required this.kull4n,
+    required this.kull5n,
+    required this.kull6n,
+    required this.kull7n,
+    required this.kull8n,
+    required this.kull1s,
+    required this.kull2s,
+    required this.kull3s,
+    required this.kull4s,
+    required this.kull5s,
+    required this.kull6s,
+    required this.kull7s,
+    required this.kull8s,
+    required this.sonSatalFiat,
+    required this.sonSatalTar,
+    required this.fYedek1,
+    required this.fYedek2,
+    required this.cYedek1,
+    required this.cYedek2,
+    required this.bYedek1,
+    required this.iYedek1,
+    required this.lYedek1,
+    required this.sonsattar,
+    required this.dagiticiKodu,
+    required this.curbirimMaliyet,
+    required this.ambarmasraf,
+    required this.ambarcikisyeri,
   });
   final int subeKodu;
   final int isletmeKodu;
@@ -253,12 +291,51 @@ class StokModel {
   final String sonstokkodu;
   final String onaytipi;
   final int onaynum;
-
   final String fiktifMam;
   final String yapilandir;
   final String sbomvarmi;
   final String baglistokkod;
   final String yapkod;
+
+  final String tur;
+  final String mgrup;
+  final String kayittarihi;
+  final String kayityapankul;
+  final String duzeltmetarihi;
+  final String duzeltmeyapankul;
+  final String ingisim;
+  final Decimal birimMaliyet;
+  final Decimal kull1n;
+  final Decimal kull2n;
+  final Decimal kull3n;
+  final Decimal kull4n;
+  final Decimal kull5n;
+  final Decimal kull6n;
+  final Decimal kull7n;
+  final Decimal kull8n;
+  final String kull1s;
+  final String kull2s;
+  final String kull3s;
+  final String kull4s;
+  final String kull5s;
+  final String kull6s;
+  final String kull7s;
+  final String kull8s;
+  final Decimal sonSatalFiat;
+  final String sonSatalTar;
+  final Decimal fYedek1;
+  final Decimal fYedek2;
+  final String cYedek1;
+  final String cYedek2;
+  final int bYedek1;
+  final int iYedek1;
+  final int lYedek1;
+  final String sonsattar;
+  final String dagiticiKodu;
+  final Decimal curbirimMaliyet;
+  final String ambarmasraf;
+  final String ambarcikisyeri;
+
   static String subeKoduStr = "SUBE_KODU";
   static String isletmeKoduStr = "ISLETME_KODU";
   static String stokKoduStr = "STOK_KODU";
@@ -386,6 +463,45 @@ class StokModel {
   static String sbomvarmiStr = "SBOMVARMI";
   static String baglistokkodStr = "BAGLISTOKKOD";
   static String yapkodStr = "YAPKOD";
+  static String turStr = "TUR";
+  static String mgrupStr = "MGRUP";
+  static String kayittarihiStr = "KAYITTARIHI";
+  static String kayityapankulStr = "KAYITYAPANKUL";
+  static String duzeltmetarihiStr = "DUZELTMETARIHI";
+  static String duzeltmeyapankulStr = "DUZELTMEYAPANKUL";
+  static String ingisimStr = "INGISIM";
+  static String birimMaliyetStr = "BIRIM_MALIYET";
+  static String kull1nStr = "KULL1N";
+  static String kull2nStr = "KULL2N";
+  static String kull3nStr = "KULL3N";
+  static String kull4nStr = "KULL4N";
+  static String kull5nStr = "KULL5N";
+  static String kull6nStr = "KULL6N";
+  static String kull7nStr = "KULL7N";
+  static String kull8nStr = "KULL8N";
+  static String kull1sStr = "KULL1S";
+  static String kull2sStr = "KULL2S";
+  static String kull3sStr = "KULL3S";
+  static String kull4sStr = "KULL4S";
+  static String kull5sStr = "KULL5S";
+  static String kull6sStr = "KULL6S";
+  static String kull7sStr = "KULL7S";
+  static String kull8sStr = "KULL8S";
+  static String sonSatalFiatStr = "SON_SATAL_FIAT";
+  static String sonSatalTarStr = "SON_SATAL_TAR";
+  static String fYedek1Str = "F_YEDEK1";
+  static String fYedek2Str = "F_YEDEK2";
+  static String cYedek1Str = "C_YEDEK1";
+  static String cYedek2Str = "C_YEDEK2";
+  static String bYedek1Str = "B_YEDEK1";
+  static String iYedek1Str = "I_YEDEK1";
+  static String lYedek1Str = "L_YEDEK1";
+  static String sonsattarStr = "SONSATTAR";
+  static String dagiticiKoduStr = "DAGITICI_KODU";
+  static String curbirimMaliyetStr = "CURBIRIM_MALIYET";
+  static String ambarmasrafStr = "AMBARMASRAF";
+  static String ambarcikisyeriStr = "AMBARCIKISYERI";
+
   factory StokModel.fromJson(Map<String, dynamic> jsonData) {
     return StokModel(
       subeKodu: Degiskenler.parseInt(degisken: jsonData[subeKoduStr]),
@@ -534,6 +650,65 @@ class StokModel {
       baglistokkod:
           Degiskenler.parseString(degisken: jsonData[baglistokkodStr]),
       yapkod: Degiskenler.parseString(degisken: jsonData[yapkodStr]),
+      tur: Degiskenler.parseString(degisken: jsonData[turStr]),
+      mgrup: Degiskenler.parseString(degisken: jsonData[mgrupStr]),
+      kayittarihi: Degiskenler.parseString(degisken: jsonData[kayittarihiStr]),
+      kayityapankul:
+          Degiskenler.parseString(degisken: jsonData[kayityapankulStr]),
+      duzeltmetarihi:
+          Degiskenler.parseString(degisken: jsonData[duzeltmetarihiStr]),
+      duzeltmeyapankul:
+          Degiskenler.parseString(degisken: jsonData[duzeltmeyapankulStr]),
+      ingisim: Degiskenler.parseString(degisken: jsonData[ingisimStr]),
+      birimMaliyet:
+          Degiskenler.parseDecimal(degisken: jsonData[birimMaliyetStr]),
+      kull1n: Degiskenler.parseDecimal(degisken: jsonData[kull1nStr]),
+      kull2n: Degiskenler.parseDecimal(degisken: jsonData[kull2nStr]),
+      kull3n: Degiskenler.parseDecimal(degisken: jsonData[kull3nStr]),
+      kull4n: Degiskenler.parseDecimal(degisken: jsonData[kull4nStr]),
+      kull5n: Degiskenler.parseDecimal(degisken: jsonData[kull5nStr]),
+      kull6n: Degiskenler.parseDecimal(degisken: jsonData[kull6nStr]),
+      kull7n: Degiskenler.parseDecimal(degisken: jsonData[kull7nStr]),
+      kull8n: Degiskenler.parseDecimal(degisken: jsonData[kull8nStr]),
+      kull1s: Degiskenler.parseString(degisken: jsonData[kull1sStr]),
+      kull2s: Degiskenler.parseString(degisken: jsonData[kull2sStr]),
+      kull3s: Degiskenler.parseString(degisken: jsonData[kull3sStr]),
+      kull4s: Degiskenler.parseString(degisken: jsonData[kull4sStr]),
+      kull5s: Degiskenler.parseString(degisken: jsonData[kull5sStr]),
+      kull6s: Degiskenler.parseString(degisken: jsonData[kull6sStr]),
+      kull7s: Degiskenler.parseString(degisken: jsonData[kull7sStr]),
+      kull8s: Degiskenler.parseString(degisken: jsonData[kull8sStr]),
+      sonSatalFiat:
+          Degiskenler.parseDecimal(degisken: jsonData[sonSatalFiatStr]),
+      sonSatalTar: Degiskenler.parseString(degisken: jsonData[sonSatalTarStr]),
+      fYedek1: Degiskenler.parseDecimal(degisken: jsonData[fYedek1Str]),
+      fYedek2: Degiskenler.parseDecimal(degisken: jsonData[fYedek2Str]),
+      cYedek1: Degiskenler.parseString(degisken: jsonData[cYedek1Str]),
+      cYedek2: Degiskenler.parseString(degisken: jsonData[cYedek2Str]),
+      bYedek1: Degiskenler.parseInt(degisken: jsonData[bYedek1Str]),
+      iYedek1: Degiskenler.parseInt(degisken: jsonData[iYedek1Str]),
+      lYedek1: Degiskenler.parseInt(degisken: jsonData[lYedek1Str]),
+      sonsattar: Degiskenler.parseString(degisken: jsonData[sonsattarStr]),
+      dagiticiKodu:
+          Degiskenler.parseString(degisken: jsonData[dagiticiKoduStr]),
+      curbirimMaliyet:
+          Degiskenler.parseDecimal(degisken: jsonData[curbirimMaliyetStr]),
+      ambarmasraf: Degiskenler.parseString(degisken: jsonData[ambarmasrafStr]),
+      ambarcikisyeri:
+          Degiskenler.parseString(degisken: jsonData[ambarcikisyeriStr]),
     );
+  }
+  String kayitTarihiDuzen() {
+    // Veritabanı örnek tarih 2015-05-28 10:04:30.000
+    if (kayittarihi.length >= 16) {
+      String yil = kayittarihi.substring(0, 4);
+      String ay = kayittarihi.substring(5, 7);
+      String gun = kayittarihi.substring(8, 10);
+      String saat = kayittarihi.substring(11, 13);
+      String dakika = kayittarihi.substring(14, 16);
+      return "$gun.$ay.$yil $saat:$dakika";
+    } else {
+      return kayittarihi;
+    }
   }
 }

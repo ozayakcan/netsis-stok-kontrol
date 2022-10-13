@@ -211,6 +211,19 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                                           ],
                                         ),
                                       ),
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: Wrap(
+                                          alignment: WrapAlignment.start,
+                                          runAlignment: WrapAlignment.start,
+                                          children: [
+                                            const Text("KAYIT TARİHİ: "),
+                                            Text(
+                                              stoklar[index].kayitTarihiDuzen(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
