@@ -78,6 +78,7 @@ class StokHareketleriState
               init(tumunuYenile: true);
             }
           : null,
+      tumStokHareketleriButonuAktif: widget.stokKodu.isNotEmpty,
       icerik: LayoutBuilder(
         builder: (context, constraints) {
           return Stack(

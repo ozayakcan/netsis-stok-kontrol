@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:netsisstok/sayfalar/veritabani_kaydet.dart';
+
+import 'stok_hareket.dart';
+import 'veritabani_kaydet.dart';
 
 class Sayfa extends StatelessWidget {
   const Sayfa({
@@ -9,12 +11,14 @@ class Sayfa extends StatelessWidget {
     required this.icerik,
     this.yenileButonAction,
     this.yenileButonAktif = false,
+    this.tumStokHareketleriButonuAktif = true,
   });
   final bool appBarGoster;
   final String baslik;
   final Widget icerik;
   final VoidCallback? yenileButonAction;
   final bool yenileButonAktif;
+  final bool tumStokHareketleriButonuAktif;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,6 +47,14 @@ class Sayfa extends StatelessWidget {
                           ),
                         );
                         break;
+                      case 2:
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const StokHareketleri(),
+                          ),
+                        );
+                        break;
                     }
                   },
                   itemBuilder: (context) => [
@@ -60,7 +72,23 @@ class Sayfa extends StatelessWidget {
                           Text("Veritabanı Bilgilerini Düzenle"),
                         ],
                       ),
-                    )
+                    ),
+                    if (tumStokHareketleriButonuAktif)
+                      PopupMenuItem(
+                        value: 2,
+                        child: Row(
+                          children: const [
+                            Icon(
+                              Icons.storage_outlined,
+                              color: Colors.black,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text("Tüm Stok Hareketleri"),
+                          ],
+                        ),
+                      ),
                   ],
                 ),
               ],
