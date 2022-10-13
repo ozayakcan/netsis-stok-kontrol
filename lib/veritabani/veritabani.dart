@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:turkish/turkish.dart';
 
 import '../model.dart/stok.dart';
+import '../model.dart/stok_hareket.dart';
 import '../model.dart/veritabani_bilgileri.dart';
 import 'konumlar.dart';
 
@@ -19,6 +20,7 @@ class Veritabani {
   static const String baslangicStr = "baslangic";
   static const String ogeSayisiStr = "ogeSayisi";
   static const String araStr = "ara";
+  static const String stokKoduStr = "STOK_KODU";
 
   static Future<String> response({
     required String url,
@@ -141,6 +143,38 @@ class Veritabani {
     } else {
       if (kDebugMode) {
         print("Stoklar alınamadı! Hata: Model degeri null");
+      }
+      return [];
+    }
+  }
+
+  static Future<List<StokHareketModel>> stokHareketleriGetir(
+    VeritabaniBilgileriModel? veritabaniBilgileriModel, {
+    required int baslangic,
+    required int ogeSayisi,
+    required String stokKodu,
+    String? arama,
+  }) async {
+    if (veritabaniBilgileriModel != null) {
+      Map<String, String> postVerileri = <String, String>{
+        baslangicStr: baslangic.toString(),
+        ogeSayisiStr: ogeSayisi.toString(),
+        stokKoduStr: stokKodu.toString(),
+      };
+      postVerileri.addAll(veritabaniBilgileriModel.toMap());
+      if (arama != null) {
+        postVerileri.addAll(<String, String>{
+          araStr: arama.toUpperCaseTr(),
+        });
+      }
+      var res = await list(
+        url: Konumlar.of(veritabaniBilgileriModel.host).stokHareketleri,
+        postVerileri: postVerileri,
+      );
+      return res.map((e) => StokHareketModel.fromJson(e)).toList();
+    } else {
+      if (kDebugMode) {
+        print("Stok hareketleri alınamadı! Hata: Model degeri null");
       }
       return [];
     }

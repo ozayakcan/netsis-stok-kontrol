@@ -1,11 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:netsisstok/sayfalar/stok_hareket.dart';
 
-import '../model.dart/stok.dart';
+import '../model.dart/stok_hareket.dart';
 import '../model.dart/veritabani_bilgileri.dart';
-import '../veritabani/degiskenler.dart';
 import '../veritabani/veritabani.dart';
 import '../widgetlar/diyalog.dart';
 import '../widgetlar/formlar.dart';
@@ -13,24 +11,29 @@ import 'sayfa.dart';
 import 'stfl_widget.dart';
 import 'veritabani_kaydet.dart';
 
-class AnaSayfa extends VarsayilanStatefulWidget {
-  const AnaSayfa({
+class StokHareketleri extends VarsayilanStatefulWidget {
+  const StokHareketleri({
     super.key,
+    this.stokKodu = "",
   });
 
+  final String stokKodu;
+
   @override
-  VarsayilanStatefulWidgetState<AnaSayfa> createState() => AnaSayfaState();
+  VarsayilanStatefulWidgetState<StokHareketleri> createState() =>
+      StokHareketleriState();
 }
 
-class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
+class StokHareketleriState
+    extends VarsayilanStatefulWidgetState<StokHareketleri> {
   bool yenileniyor = false;
   bool diyalogDurumu = false;
 
   VeritabaniBilgileriModel? veritabaniBilgileriModel;
 
-  List<StokModel> stoklar = [];
+  List<StokHareketModel> stokHareketleri = [];
 
-  ScrollController stoklarScrollController = ScrollController();
+  ScrollController stokHareketleriScrollController = ScrollController();
 
   int yuklenecekOgeIndex = 0;
   int yuklenecekOgeSayisi = 50;
@@ -46,9 +49,9 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
   void initState() {
     super.initState();
     init(tumunuYenile: true);
-    stoklarScrollController.addListener(() {
-      if (stoklarScrollController.position.pixels >=
-              stoklarScrollController.position.maxScrollExtent &&
+    stokHareketleriScrollController.addListener(() {
+      if (stokHareketleriScrollController.position.pixels >=
+              stokHareketleriScrollController.position.maxScrollExtent &&
           !yukleniyor &&
           !yenileniyor) {
         init(tumunuYenile: false);
@@ -59,7 +62,7 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
   @override
   void dispose() {
     super.dispose();
-    stoklarScrollController.dispose();
+    stokHareketleriScrollController.dispose();
     araController.dispose();
   }
 
@@ -68,7 +71,7 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
     double aramaYukseklik = 50;
     double yukleniyorYukseklik = 35;
     return Sayfa(
-      baslik: "Netsis Stok",
+      baslik: widget.stokKodu.isEmpty ? "Stok Hareketleri" : widget.stokKodu,
       yenileButonAktif: true,
       yenileButonAction: (!yenileniyor && !yukleniyor)
           ? () async {
@@ -111,9 +114,9 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                   children: [
                     Expanded(
                       child: ListView.builder(
-                        controller: stoklarScrollController,
+                        controller: stokHareketleriScrollController,
                         scrollDirection: Axis.vertical,
-                        itemCount: stoklar.length,
+                        itemCount: stokHareketleri.length,
                         itemBuilder: (context, index) {
                           return Card(
                             child: Column(
@@ -121,15 +124,6 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                                 if (index == 0)
                                   const Divider(color: Colors.black),
                                 InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => StokHareketleri(
-                                            stokKodu: stoklar[index].stokKodu),
-                                      ),
-                                    );
-                                  },
                                   child: Column(
                                     children: [
                                       SizedBox(
@@ -139,7 +133,8 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                                           runAlignment: WrapAlignment.start,
                                           children: [
                                             const Text("STOK KODU: "),
-                                            Text(stoklar[index].stokKodu),
+                                            Text(stokHareketleri[index]
+                                                .stokKodu),
                                           ],
                                         ),
                                       ),
@@ -149,88 +144,10 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                                           alignment: WrapAlignment.start,
                                           runAlignment: WrapAlignment.start,
                                           children: [
-                                            const Text("STOK ADI: "),
-                                            Text(
-                                              stoklar[index].stokAdi,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Wrap(
-                                          alignment: WrapAlignment.start,
-                                          runAlignment: WrapAlignment.start,
-                                          children: [
-                                            const Text("MİKTAR: "),
-                                            Text(
-                                              stoklar[index].miktar.toString(),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Wrap(
-                                          alignment: WrapAlignment.start,
-                                          runAlignment: WrapAlignment.start,
-                                          children: [
-                                            const Text("ÖLÇÜ BİRİMİ: "),
-                                            Text(
-                                              "${stoklar[index].olcuBr1}${(stoklar[index].olcuBr2.isNotEmpty ? ", ${stoklar[index].olcuBr2}" : "")}${(stoklar[index].olcuBr3.isNotEmpty ? ", ${stoklar[index].olcuBr3}" : "")}",
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Wrap(
-                                          alignment: WrapAlignment.start,
-                                          runAlignment: WrapAlignment.start,
-                                          children: [
-                                            const Text("ALIŞ FİYATI: "),
-                                            Text(
-                                              "${(stoklar[index].alisFiat1 > Degiskenler.parseDecimal() ? stoklar[index].alisFiat1.toString() : "0")}${(stoklar[index].alisFiat2 > Degiskenler.parseDecimal() ? ", ${stoklar[index].alisFiat2.toString()}" : "")}${(stoklar[index].alisFiat3 > Degiskenler.parseDecimal() ? ", ${stoklar[index].alisFiat3.toString()}" : "")}${(stoklar[index].alisFiat4 > Degiskenler.parseDecimal() ? ", ${stoklar[index].alisFiat4.toString()}" : "")}",
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Wrap(
-                                          alignment: WrapAlignment.start,
-                                          runAlignment: WrapAlignment.start,
-                                          children: [
-                                            const Text("SATIŞ FİYATI: "),
-                                            Text(
-                                              "${(stoklar[index].satisFiat1 > Degiskenler.parseDecimal() ? stoklar[index].satisFiat1.toString() : "0")}${(stoklar[index].satisFiat2 > Degiskenler.parseDecimal() ? ", ${stoklar[index].satisFiat2.toString()}" : "")}${(stoklar[index].satisFiat3 > Degiskenler.parseDecimal() ? ", ${stoklar[index].satisFiat3.toString()}" : "")}${(stoklar[index].satisFiat4 > Degiskenler.parseDecimal() ? ", ${stoklar[index].satisFiat4.toString()}" : "")}",
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Wrap(
-                                          alignment: WrapAlignment.start,
-                                          runAlignment: WrapAlignment.start,
-                                          children: [
-                                            const Text("KDV: "),
-                                            Text(
-                                              "%${stoklar[index].kdvOrani.toString()}",
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Wrap(
-                                          alignment: WrapAlignment.start,
-                                          runAlignment: WrapAlignment.start,
-                                          children: [
-                                            const Text("KAYIT TARİHİ: "),
-                                            Text(
-                                              stoklar[index].kayitTarihiDuzen(),
-                                            ),
+                                            const Text("TARİH: "),
+                                            Text(stokHareketleri[index]
+                                                .stharTarihiDuzen(
+                                                    saatiGoster: false)),
                                           ],
                                         ),
                                       ),
@@ -293,7 +210,7 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
   }) async {
     if (tumunuYenile) {
       setState(() {
-        stoklar = [];
+        stokHareketleri = [];
         yuklenecekOgeIndex = 0;
         yenileniyor = true;
         hepsiYuklendi = false;
@@ -319,21 +236,23 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
         setState(() {
           veritabaniBilgileriModel = veritabaniBilgileriModelTemp;
         });
-        List<StokModel> stoklarTemp = await Veritabani.stoklariGetir(
+        List<StokHareketModel> stokHareketleriTemp =
+            await Veritabani.stokHareketleriGetir(
           veritabaniBilgileriModel,
           arama: aramaText.isNotEmpty ? aramaText : null,
           baslangic: yuklenecekOgeIndex,
           ogeSayisi: yuklenecekOgeSayisi,
+          stokKodu: widget.stokKodu,
         );
-        if (stoklarTemp.length < yuklenecekOgeSayisi) {
+        if (stokHareketleriTemp.length < yuklenecekOgeSayisi) {
           setState(() {
             hepsiYuklendi = true;
           });
         }
-        if (stoklarTemp.isNotEmpty) {
+        if (stokHareketleriTemp.isNotEmpty) {
           setState(() {
             yuklenecekOgeIndex += yuklenecekOgeSayisi;
-            stoklar.addAll(stoklarTemp);
+            stokHareketleri.addAll(stokHareketleriTemp);
           });
         }
       }
