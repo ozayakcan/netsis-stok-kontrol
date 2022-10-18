@@ -49,9 +49,9 @@ class TabloBaslik extends StatelessWidget {
       width: width,
       padding: const EdgeInsets.all(10),
       child: Wrap(
-        alignment: WrapAlignment.center,
-        runAlignment: WrapAlignment.center,
-        crossAxisAlignment: WrapCrossAlignment.center,
+        alignment: WrapAlignment.start,
+        runAlignment: WrapAlignment.start,
+        crossAxisAlignment: WrapCrossAlignment.start,
         children: [
           Text(
             baslik,
@@ -110,9 +110,9 @@ class TabloOgeText extends StatelessWidget {
     return SizedBox(
       width: width,
       child: Wrap(
-        alignment: WrapAlignment.center,
-        runAlignment: WrapAlignment.center,
-        crossAxisAlignment: WrapCrossAlignment.center,
+        alignment: WrapAlignment.start,
+        runAlignment: WrapAlignment.start,
+        crossAxisAlignment: WrapCrossAlignment.start,
         children: [
           Text(text),
         ],

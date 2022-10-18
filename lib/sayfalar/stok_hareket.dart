@@ -6,7 +6,7 @@ import '../modeller/stok_hareket.dart';
 import '../modeller/veritabani_bilgileri.dart';
 import '../veritabani/veritabani.dart';
 import '../widgetlar/diyalog.dart';
-import '../widgetlar/formlar.dart';
+import '../widgetlar/tablo.dart';
 import 'sayfa.dart';
 import 'stfl_widget.dart';
 import 'veritabani_kaydet.dart';
@@ -41,10 +41,6 @@ class StokHareketleriState
   bool yukleniyor = false;
   bool hepsiYuklendi = false;
 
-  TextEditingController araController = TextEditingController();
-  String aramaText = "";
-  int aramaMinKarakter = 3;
-
   @override
   void initState() {
     super.initState();
@@ -63,13 +59,12 @@ class StokHareketleriState
   void dispose() {
     super.dispose();
     stokHareketleriScrollController.dispose();
-    araController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    double aramaYukseklik = 50;
     double yukleniyorYukseklik = 35;
+    double ogeGenisligi = 150;
     return Sayfa(
       baslik: widget.stokKodu.isEmpty ? "Stok Hareketleri" : widget.stokKodu,
       yenileButonAktif: true,
@@ -88,90 +83,81 @@ class StokHareketleriState
                   top: 0,
                   left: 0,
                   right: 0,
-                  child: SizedBox(
-                    height: aramaYukseklik,
-                    child: TextFieldDef(
-                      width: MediaQuery.of(context).size.width,
-                      textController: araController,
-                      hintText: "Ara",
-                      suffixIcon: TextFieldIconDef(
-                        icon: Icons.search,
-                        onPressed: () {
-                          ara();
-                        },
+                  bottom: yukleniyor ? yukleniyorYukseklik : 0,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Tablo(
+                          scrollController: stokHareketleriScrollController,
+                          basliklar: [
+                            TabloBaslik(
+                              baslik: "FİŞ NO",
+                              width: ogeGenisligi,
+                            ),
+                            TabloBaslik(
+                              baslik: "MÜŞTERİ",
+                              width: ogeGenisligi,
+                            ),
+                            TabloBaslik(
+                              baslik: "TARİH",
+                              width: ogeGenisligi,
+                            ),
+                            TabloBaslik(
+                              baslik: "VADE TARİHİ",
+                              width: ogeGenisligi,
+                            ),
+                            TabloBaslik(
+                              baslik: "DÜZELTME TARİHİ",
+                              width: ogeGenisligi,
+                            ),
+                          ],
+                          ogeler: stokHareketleri.map((stokHareketi) {
+                            return TabloOge(
+                              ogeler: [
+                                TabloOgeText(
+                                  text: stokHareketi.fisno,
+                                  width: ogeGenisligi,
+                                ),
+                                TabloOgeText(
+                                  text: stokHareketi.stharAciklama,
+                                  width: ogeGenisligi,
+                                ),
+                                TabloOgeText(
+                                  text: stokHareketi.stharKdv.toString(),
+                                  width: ogeGenisligi,
+                                ),
+                                TabloOgeText(
+                                  text: Veritabani.mssqlTarih(
+                                    tarih: stokHareketi.stharTarih,
+                                    saatiGoster: false,
+                                  ),
+                                  width: ogeGenisligi,
+                                ),
+                                TabloOgeText(
+                                  text: Veritabani.mssqlTarih(
+                                    tarih: stokHareketi.vadeTarihi,
+                                    saatiGoster: false,
+                                  ),
+                                  width: ogeGenisligi,
+                                ),
+                                TabloOgeText(
+                                  text: Veritabani.mssqlTarih(
+                                    tarih: stokHareketi.duzeltmetarihi,
+                                    saatiGoster: false,
+                                  ),
+                                  width: ogeGenisligi,
+                                ),
+                              ],
+                            );
+                          }).toList(),
+                        ),
                       ),
-                      onSubmit: () {
-                        ara();
-                      },
-                    ),
+                    ],
                   ),
                 ),
-              Positioned(
-                top: yenileniyor ? 0 : aramaYukseklik,
-                left: 0,
-                right: 0,
-                bottom: yukleniyor ? yukleniyorYukseklik : 0,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        controller: stokHareketleriScrollController,
-                        scrollDirection: Axis.vertical,
-                        itemCount: stokHareketleri.length,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            child: Column(
-                              children: [
-                                if (index == 0)
-                                  const Divider(color: Colors.black),
-                                InkWell(
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Wrap(
-                                          alignment: WrapAlignment.start,
-                                          runAlignment: WrapAlignment.start,
-                                          children: [
-                                            const Text("STOK KODU: "),
-                                            Text(stokHareketleri[index]
-                                                .stokKodu),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Wrap(
-                                          alignment: WrapAlignment.start,
-                                          runAlignment: WrapAlignment.start,
-                                          children: [
-                                            const Text("TARİH: "),
-                                            Text(
-                                              Veritabani.mssqlTarih(
-                                                tarih: stokHareketleri[index]
-                                                    .stharTarih,
-                                                saatiGoster: false,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const Divider(color: Colors.black),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               if (yenileniyor)
                 Positioned(
-                  top: aramaYukseklik,
+                  top: 0,
                   bottom: 0,
                   left: 0,
                   right: 0,
@@ -244,7 +230,6 @@ class StokHareketleriState
         List<StokHareketModel> stokHareketleriTemp =
             await Veritabani.stokHareketleriGetir(
           veritabaniBilgileriModel,
-          arama: aramaText.isNotEmpty ? aramaText : null,
           baslangic: yuklenecekOgeIndex,
           ogeSayisi: yuklenecekOgeSayisi,
           stokKodu: widget.stokKodu,
@@ -324,12 +309,5 @@ class StokHareketleriState
         ),
       ],
     );
-  }
-
-  void ara() {
-    setState(() {
-      aramaText = araController.text;
-    });
-    init(tumunuYenile: true);
   }
 }
