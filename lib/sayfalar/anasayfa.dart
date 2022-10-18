@@ -4,10 +4,10 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../modeller/stok.dart';
 import '../modeller/veritabani_bilgileri.dart';
-import '../veritabani/degiskenler.dart';
 import '../veritabani/veritabani.dart';
 import '../widgetlar/diyalog.dart';
 import '../widgetlar/formlar.dart';
+import '../widgetlar/tablo.dart';
 import 'sayfa.dart';
 import 'stfl_widget.dart';
 import 'stok_hareket.dart';
@@ -67,6 +67,7 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
   Widget build(BuildContext context) {
     double aramaYukseklik = 50;
     double yukleniyorYukseklik = 35;
+    double ogeGenisligi = MediaQuery.of(context).size.width / 3;
     return Sayfa(
       baslik: "Stok Kontrolü",
       yenileButonAktif: true,
@@ -102,154 +103,57 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                     ),
                   ),
                 ),
-              Positioned(
-                top: yenileniyor ? 0 : aramaYukseklik,
-                left: 0,
-                right: 0,
-                bottom: yukleniyor ? yukleniyorYukseklik : 0,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        controller: stoklarScrollController,
-                        scrollDirection: Axis.vertical,
-                        itemCount: stoklar.length,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            child: Column(
-                              children: [
-                                if (index == 0)
-                                  const Divider(color: Colors.black),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => StokHareketleri(
-                                            stokKodu: stoklar[index].stokKodu),
-                                      ),
-                                    );
-                                  },
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Wrap(
-                                          alignment: WrapAlignment.start,
-                                          runAlignment: WrapAlignment.start,
-                                          children: [
-                                            const Text("STOK KODU: "),
-                                            Text(stoklar[index].stokKodu),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Wrap(
-                                          alignment: WrapAlignment.start,
-                                          runAlignment: WrapAlignment.start,
-                                          children: [
-                                            const Text("STOK ADI: "),
-                                            Text(
-                                              stoklar[index].stokAdi,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Wrap(
-                                          alignment: WrapAlignment.start,
-                                          runAlignment: WrapAlignment.start,
-                                          children: [
-                                            const Text("MİKTAR: "),
-                                            Text(
-                                              stoklar[index].miktar.toString(),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Wrap(
-                                          alignment: WrapAlignment.start,
-                                          runAlignment: WrapAlignment.start,
-                                          children: [
-                                            const Text("ÖLÇÜ BİRİMİ: "),
-                                            Text(
-                                              "${stoklar[index].olcuBr1}${(stoklar[index].olcuBr2.isNotEmpty ? ", ${stoklar[index].olcuBr2}" : "")}${(stoklar[index].olcuBr3.isNotEmpty ? ", ${stoklar[index].olcuBr3}" : "")}",
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Wrap(
-                                          alignment: WrapAlignment.start,
-                                          runAlignment: WrapAlignment.start,
-                                          children: [
-                                            const Text("ALIŞ FİYATI: "),
-                                            Text(
-                                              "${(stoklar[index].alisFiat1 > Degiskenler.parseDecimal() ? stoklar[index].alisFiat1.toString() : "0")}${(stoklar[index].alisFiat2 > Degiskenler.parseDecimal() ? ", ${stoklar[index].alisFiat2.toString()}" : "")}${(stoklar[index].alisFiat3 > Degiskenler.parseDecimal() ? ", ${stoklar[index].alisFiat3.toString()}" : "")}${(stoklar[index].alisFiat4 > Degiskenler.parseDecimal() ? ", ${stoklar[index].alisFiat4.toString()}" : "")}",
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Wrap(
-                                          alignment: WrapAlignment.start,
-                                          runAlignment: WrapAlignment.start,
-                                          children: [
-                                            const Text("SATIŞ FİYATI: "),
-                                            Text(
-                                              "${(stoklar[index].satisFiat1 > Degiskenler.parseDecimal() ? stoklar[index].satisFiat1.toString() : "0")}${(stoklar[index].satisFiat2 > Degiskenler.parseDecimal() ? ", ${stoklar[index].satisFiat2.toString()}" : "")}${(stoklar[index].satisFiat3 > Degiskenler.parseDecimal() ? ", ${stoklar[index].satisFiat3.toString()}" : "")}${(stoklar[index].satisFiat4 > Degiskenler.parseDecimal() ? ", ${stoklar[index].satisFiat4.toString()}" : "")}",
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Wrap(
-                                          alignment: WrapAlignment.start,
-                                          runAlignment: WrapAlignment.start,
-                                          children: [
-                                            const Text("KDV: "),
-                                            Text(
-                                              "%${stoklar[index].kdvOrani.toString()}",
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Wrap(
-                                          alignment: WrapAlignment.start,
-                                          runAlignment: WrapAlignment.start,
-                                          children: [
-                                            const Text("KAYIT TARİHİ: "),
-                                            Text(
-                                              Veritabani.mssqlTarih(
-                                                tarih:
-                                                    stoklar[index].kayittarihi,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const Divider(color: Colors.black),
-                              ],
+              if (!yenileniyor)
+                Positioned(
+                  top: aramaYukseklik,
+                  left: 0,
+                  right: 0,
+                  bottom: yukleniyor ? yukleniyorYukseklik : 0,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Tablo(
+                          scrollController: stoklarScrollController,
+                          basliklar: [
+                            TabloBaslik(
+                              baslik: "STOK KODU",
+                              width: ogeGenisligi,
                             ),
-                          );
-                        },
+                            TabloBaslik(
+                              baslik: "STOK ADI",
+                              width: MediaQuery.of(context).size.width -
+                                  ogeGenisligi,
+                            ),
+                          ],
+                          ogeler: stoklar.map((stok) {
+                            return TabloOge(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => StokHareketleri(
+                                        stokKodu: stok.stokKodu),
+                                  ),
+                                );
+                              },
+                              ogeler: [
+                                TabloOgeText(
+                                  text: stok.stokKodu,
+                                  width: ogeGenisligi,
+                                ),
+                                TabloOgeText(
+                                  text: stok.stokAdi,
+                                  width: MediaQuery.of(context).size.width -
+                                      ogeGenisligi,
+                                ),
+                              ],
+                            );
+                          }).toList(),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
               if (yenileniyor)
                 Positioned(
                   top: aramaYukseklik,
