@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:netsisstok/widgetlar/stok.dart';
 
 import '../modeller/stok.dart';
 import '../modeller/stok_hareket.dart';
@@ -112,79 +113,13 @@ class StokHareketleriState
                                       ),
                                     ),
                                     Tablo(
-                                      basliklar: [
-                                        TabloBaslik(
-                                          baslik: "STOK KODU",
-                                          width: ogeGenisligi,
-                                        ),
-                                        TabloBaslik(
-                                          baslik: "STOK ADI",
-                                          width: ogeGenisligi,
-                                        ),
-                                        TabloBaslik(
-                                          baslik: "ALIŞ FİYATI",
-                                          width: ogeGenisligi,
-                                        ),
-                                        TabloBaslik(
-                                          baslik: "SATIŞ FİYATI 1",
-                                          width: ogeGenisligi,
-                                        ),
-                                        TabloBaslik(
-                                          baslik: "SATIŞ FİYATI 2",
-                                          width: ogeGenisligi,
-                                        ),
-                                        TabloBaslik(
-                                          baslik: "KDV (%)",
-                                          width: ogeGenisligi,
-                                        ),
-                                        TabloBaslik(
-                                          baslik: "ÖLÇÜ BİRİMİ",
-                                          width: ogeGenisligi,
-                                        ),
-                                        TabloBaslik(
-                                          baslik: "TARİH",
-                                          width: ogeGenisligi,
-                                        ),
-                                      ],
+                                      basliklar: stokBasliklar(
+                                        ogeGenisligi: ogeGenisligi,
+                                      ),
                                       ogeler: stoklar.map((stok) {
-                                        return TabloOge(
-                                          ogeler: [
-                                            TabloOgeText(
-                                              text: stok.stokKodu,
-                                              width: ogeGenisligi,
-                                            ),
-                                            TabloOgeText(
-                                              text: stok.stokAdi,
-                                              width: ogeGenisligi,
-                                            ),
-                                            TabloOgeText(
-                                              text: stok.alisFiat1.toString(),
-                                              width: ogeGenisligi,
-                                            ),
-                                            TabloOgeText(
-                                              text: stok.satisFiat1.toString(),
-                                              width: ogeGenisligi,
-                                            ),
-                                            TabloOgeText(
-                                              text: stok.satisFiat2.toString(),
-                                              width: ogeGenisligi,
-                                            ),
-                                            TabloOgeText(
-                                              text: stok.kdvOrani.toString(),
-                                              width: ogeGenisligi,
-                                            ),
-                                            TabloOgeText(
-                                              text: stok.olcuBr1,
-                                              width: ogeGenisligi,
-                                            ),
-                                            TabloOgeText(
-                                              text: Veritabani.mssqlTarih(
-                                                tarih: stok.kayittarihi,
-                                                saatiGoster: false,
-                                              ),
-                                              width: ogeGenisligi,
-                                            ),
-                                          ],
+                                        return StokOgeler(
+                                          stok: stok,
+                                          ogeGenisligi: ogeGenisligi,
                                         );
                                       }).toList(),
                                     ),

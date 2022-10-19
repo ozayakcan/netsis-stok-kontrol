@@ -7,6 +7,7 @@ import '../modeller/veritabani_bilgileri.dart';
 import '../veritabani/veritabani.dart';
 import '../widgetlar/diyalog.dart';
 import '../widgetlar/formlar.dart';
+import '../widgetlar/stok.dart';
 import '../widgetlar/tablo.dart';
 import 'sayfa.dart';
 import 'stfl_widget.dart';
@@ -67,7 +68,7 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
   Widget build(BuildContext context) {
     double aramaYukseklik = 50;
     double yukleniyorYukseklik = 35;
-    double ogeGenisligi = MediaQuery.of(context).size.width / 3;
+    double ogeGenisligi = MediaQuery.of(context).size.width / 3.5;
     return Sayfa(
       baslik: "Stok Kontrolü",
       yenileButonAktif: true,
@@ -114,19 +115,11 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                       Expanded(
                         child: Tablo(
                           scrollController: stoklarScrollController,
-                          basliklar: [
-                            TabloBaslik(
-                              baslik: "STOK KODU",
-                              width: ogeGenisligi,
-                            ),
-                            TabloBaslik(
-                              baslik: "STOK ADI",
-                              width: MediaQuery.of(context).size.width -
-                                  ogeGenisligi,
-                            ),
-                          ],
+                          basliklar: stokBasliklar(
+                            ogeGenisligi: ogeGenisligi,
+                          ),
                           ogeler: stoklar.map((stok) {
-                            return TabloOge(
+                            return StokOgeler(
                               onPressed: () {
                                 Navigator.push(
                                   context,
@@ -138,17 +131,8 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                                   ),
                                 );
                               },
-                              ogeler: [
-                                TabloOgeText(
-                                  text: stok.stokKodu,
-                                  width: ogeGenisligi,
-                                ),
-                                TabloOgeText(
-                                  text: stok.stokAdi,
-                                  width: MediaQuery.of(context).size.width -
-                                      ogeGenisligi,
-                                ),
-                              ],
+                              stok: stok,
+                              ogeGenisligi: ogeGenisligi,
                             );
                           }).toList(),
                         ),
