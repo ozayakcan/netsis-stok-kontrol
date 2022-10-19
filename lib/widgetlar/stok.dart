@@ -30,7 +30,7 @@ List<Widget> stokBasliklar({
       width: ogeGenisligi,
     ),
     TabloBaslik(
-      baslik: "ÖLÇÜ BİRİMİ",
+      baslik: "ÖLÇÜ BİRİMLERİ",
       width: ogeGenisligi,
     ),
     TabloBaslik(
@@ -93,7 +93,7 @@ class StokOgeler extends StatelessWidget {
         ),
         TabloOgeText(
           text:
-              "${stok.olcuBr1.isNotEmpty ? "1: ${stok.olcuBr1}" : ""}${stok.olcuBr2.isNotEmpty ? "\n2: ${stok.olcuBr2}" : ""}${stok.olcuBr3.isNotEmpty ? "\n3: ${stok.olcuBr3}" : ""}",
+              "${stok.olcuBr1.isNotEmpty ? stok.olcuBr1 : ""}${stok.olcuBr2.isNotEmpty ? "\n${stok.olcuBr2}" : ""}${stok.olcuBr3.isNotEmpty ? "\n${stok.olcuBr3}" : ""}",
           width: ogeGenisligi,
         ),
         TabloOgeText(
