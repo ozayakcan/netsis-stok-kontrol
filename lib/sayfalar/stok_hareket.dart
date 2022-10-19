@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
+import '../modeller/stok.dart';
 import '../modeller/stok_hareket.dart';
 import '../modeller/veritabani_bilgileri.dart';
 import '../veritabani/veritabani.dart';
@@ -15,9 +16,11 @@ class StokHareketleri extends VarsayilanStatefulWidget {
   const StokHareketleri({
     super.key,
     this.stokKodu = "",
+    this.stokAdi = "",
   });
 
   final String stokKodu;
+  final String stokAdi;
 
   @override
   VarsayilanStatefulWidgetState<StokHareketleri> createState() =>
@@ -32,6 +35,7 @@ class StokHareketleriState
   VeritabaniBilgileriModel? veritabaniBilgileriModel;
 
   List<StokHareketModel> stokHareketleri = [];
+  List<StokModel> stoklar = [];
 
   ScrollController stokHareketleriScrollController = ScrollController();
 
@@ -64,9 +68,14 @@ class StokHareketleriState
   @override
   Widget build(BuildContext context) {
     double yukleniyorYukseklik = 35;
-    double ogeGenisligi = 150;
+    double tamBoyut = MediaQuery.of(context).size.width;
+    double ogeGenisligi = tamBoyut > 600 ? tamBoyut / 5.5 : tamBoyut / 2.5;
     return Sayfa(
-      baslik: widget.stokKodu.isEmpty ? "Stok Hareketleri" : widget.stokKodu,
+      baslik: widget.stokAdi.isNotEmpty
+          ? widget.stokAdi
+          : widget.stokKodu.isNotEmpty
+              ? widget.stokKodu
+              : "Stok Hareketleri",
       yenileButonAktif: true,
       yenileButonAction: (!yenileniyor && !yukleniyor)
           ? () async {
@@ -89,6 +98,111 @@ class StokHareketleriState
                       Expanded(
                         child: Tablo(
                           scrollController: stokHareketleriScrollController,
+                          ekIcerik: widget.stokKodu.isNotEmpty
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Bilgiler",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Tablo(
+                                      basliklar: [
+                                        TabloBaslik(
+                                          baslik: "STOK KODU",
+                                          width: ogeGenisligi,
+                                        ),
+                                        TabloBaslik(
+                                          baslik: "STOK ADI",
+                                          width: ogeGenisligi,
+                                        ),
+                                        TabloBaslik(
+                                          baslik: "ALIŞ FİYATI",
+                                          width: ogeGenisligi,
+                                        ),
+                                        TabloBaslik(
+                                          baslik: "SATIŞ FİYATI 1",
+                                          width: ogeGenisligi,
+                                        ),
+                                        TabloBaslik(
+                                          baslik: "SATIŞ FİYATI 2",
+                                          width: ogeGenisligi,
+                                        ),
+                                        TabloBaslik(
+                                          baslik: "KDV (%)",
+                                          width: ogeGenisligi,
+                                        ),
+                                        TabloBaslik(
+                                          baslik: "ÖLÇÜ BİRİMİ",
+                                          width: ogeGenisligi,
+                                        ),
+                                        TabloBaslik(
+                                          baslik: "TARİH",
+                                          width: ogeGenisligi,
+                                        ),
+                                      ],
+                                      ogeler: stoklar.map((stok) {
+                                        return TabloOge(
+                                          ogeler: [
+                                            TabloOgeText(
+                                              text: stok.stokKodu,
+                                              width: ogeGenisligi,
+                                            ),
+                                            TabloOgeText(
+                                              text: stok.stokAdi,
+                                              width: ogeGenisligi,
+                                            ),
+                                            TabloOgeText(
+                                              text: stok.alisFiat1.toString(),
+                                              width: ogeGenisligi,
+                                            ),
+                                            TabloOgeText(
+                                              text: stok.satisFiat1.toString(),
+                                              width: ogeGenisligi,
+                                            ),
+                                            TabloOgeText(
+                                              text: stok.satisFiat2.toString(),
+                                              width: ogeGenisligi,
+                                            ),
+                                            TabloOgeText(
+                                              text: stok.kdvOrani.toString(),
+                                              width: ogeGenisligi,
+                                            ),
+                                            TabloOgeText(
+                                              text: stok.olcuBr1,
+                                              width: ogeGenisligi,
+                                            ),
+                                            TabloOgeText(
+                                              text: Veritabani.mssqlTarih(
+                                                tarih: stok.kayittarihi,
+                                                saatiGoster: false,
+                                              ),
+                                              width: ogeGenisligi,
+                                            ),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Stok Hareketleri",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : null,
                           basliklar: [
                             TabloBaslik(
                               baslik: "FİŞ NO",
@@ -120,10 +234,6 @@ class StokHareketleriState
                                 ),
                                 TabloOgeText(
                                   text: stokHareketi.stharAciklama,
-                                  width: ogeGenisligi,
-                                ),
-                                TabloOgeText(
-                                  text: stokHareketi.stharKdv.toString(),
                                   width: ogeGenisligi,
                                 ),
                                 TabloOgeText(
@@ -234,6 +344,12 @@ class StokHareketleriState
           ogeSayisi: yuklenecekOgeSayisi,
           stokKodu: widget.stokKodu,
         );
+        List<StokModel> stoklarTemp = await Veritabani.stoklariGetir(
+          veritabaniBilgileriModel,
+          arama: widget.stokKodu,
+          baslangic: 0,
+          ogeSayisi: 1,
+        );
         if (stokHareketleriTemp.length < yuklenecekOgeSayisi) {
           setState(() {
             hepsiYuklendi = true;
@@ -243,6 +359,7 @@ class StokHareketleriState
           setState(() {
             yuklenecekOgeIndex += yuklenecekOgeSayisi;
             stokHareketleri.addAll(stokHareketleriTemp);
+            stoklar = stoklarTemp;
           });
         }
       }

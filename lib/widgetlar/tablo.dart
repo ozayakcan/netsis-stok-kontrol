@@ -6,30 +6,45 @@ class Tablo extends StatelessWidget {
     required this.basliklar,
     required this.ogeler,
     this.scrollController,
+    this.yatayKaydirilabilir = true,
+    this.dikeyKaydirilabilir = true,
+    this.ekIcerik,
   });
 
   final ScrollController? scrollController;
   final List<Widget> basliklar;
   final List<Widget> ogeler;
+  final bool yatayKaydirilabilir;
+  final bool dikeyKaydirilabilir;
+  final Widget? ekIcerik;
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: SingleChildScrollView(
-        controller: scrollController,
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            Row(
-              children: basliklar,
-            ),
-            Column(
-              children: ogeler,
-            )
-          ],
+    Widget icerik = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (ekIcerik != null) ekIcerik!,
+        Row(
+          children: basliklar,
         ),
-      ),
+        Column(
+          children: ogeler,
+        )
+      ],
     );
+    icerik = yatayKaydirilabilir
+        ? SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: icerik,
+          )
+        : icerik;
+    icerik = dikeyKaydirilabilir
+        ? SingleChildScrollView(
+            controller: scrollController,
+            scrollDirection: Axis.vertical,
+            child: icerik,
+          )
+        : icerik;
+    return icerik;
   }
 }
 

@@ -132,7 +132,9 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => StokHareketleri(
-                                        stokKodu: stok.stokKodu),
+                                      stokKodu: stok.stokKodu,
+                                      stokAdi: stok.stokAdi,
+                                    ),
                                   ),
                                 );
                               },
