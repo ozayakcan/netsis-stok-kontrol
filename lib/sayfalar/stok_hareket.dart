@@ -138,28 +138,36 @@ class StokHareketleriState
                                   ],
                                 )
                               : null,
-                          basliklar: [
-                            TabloBaslik(
-                              baslik: "FİŞ NO",
-                              width: ogeGenisligi,
-                            ),
-                            TabloBaslik(
-                              baslik: "MÜŞTERİ",
-                              width: ogeGenisligi,
-                            ),
-                            TabloBaslik(
-                              baslik: "TARİH",
-                              width: ogeGenisligi,
-                            ),
-                            TabloBaslik(
-                              baslik: "VADE TARİHİ",
-                              width: ogeGenisligi,
-                            ),
-                            TabloBaslik(
-                              baslik: "DÜZELTME TARİHİ",
-                              width: ogeGenisligi,
-                            ),
-                          ],
+                          basliklar: stokHareketleri.isNotEmpty
+                              ? [
+                                  TabloBaslik(
+                                    baslik: "FİŞ NO",
+                                    width: ogeGenisligi,
+                                  ),
+                                  TabloBaslik(
+                                    baslik: "MÜŞTERİ",
+                                    width: ogeGenisligi,
+                                  ),
+                                  TabloBaslik(
+                                    baslik: "TARİH",
+                                    width: ogeGenisligi,
+                                  ),
+                                  TabloBaslik(
+                                    baslik: "VADE TARİHİ",
+                                    width: ogeGenisligi,
+                                  ),
+                                  TabloBaslik(
+                                    baslik: "DÜZELTME TARİHİ",
+                                    width: ogeGenisligi,
+                                  ),
+                                ]
+                              : [
+                                  const SizedBox(
+                                    height: 50,
+                                    child: Text(
+                                        "Henüz bir stok hareketi bulunmuyor."),
+                                  )
+                                ],
                           ogeler: stokHareketleri.map((stokHareketi) {
                             return TabloOge(
                               ogeler: [
