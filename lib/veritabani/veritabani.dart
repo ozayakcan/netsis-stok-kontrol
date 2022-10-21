@@ -153,7 +153,6 @@ class Veritabani {
     required int baslangic,
     required int ogeSayisi,
     required String stokKodu,
-    String? arama,
   }) async {
     if (veritabaniBilgileriModel != null) {
       Map<String, String> postVerileri = <String, String>{
@@ -162,11 +161,6 @@ class Veritabani {
         stokKoduStr: stokKodu.toString(),
       };
       postVerileri.addAll(veritabaniBilgileriModel.toMap());
-      if (arama != null) {
-        postVerileri.addAll(<String, String>{
-          araStr: arama.toUpperCaseTr(),
-        });
-      }
       var res = await list(
         url: Konumlar.of(veritabaniBilgileriModel.host).stokHareketleri,
         postVerileri: postVerileri,
