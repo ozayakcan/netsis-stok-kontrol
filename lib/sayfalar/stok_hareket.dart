@@ -83,45 +83,43 @@ class StokHareketleriState
                       Expanded(
                         child: Tablo(
                           scrollController: stokHareketleriScrollController,
-                          ekIcerik: widget.stokKodu.isNotEmpty
-                              ? Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                        "Bilgiler",
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Tablo(
-                                      basliklar: stokBasliklar(
-                                        ogeGenisligi: ogeGenisligi,
-                                      ),
-                                      ogeler: stoklar.map((stok) {
-                                        return StokOgeler(
-                                          stok: stok,
-                                          ogeGenisligi: ogeGenisligi,
-                                        );
-                                      }).toList(),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                        "Stok Hareketleri",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : null,
+                          ekIcerik: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  "Bilgiler",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Tablo(
+                                basliklar: stokBasliklar(
+                                  ogeGenisligi: ogeGenisligi,
+                                ),
+                                ogeler: stoklar.map((stok) {
+                                  return StokOgeler(
+                                    stok: stok,
+                                    ogeGenisligi: ogeGenisligi,
+                                  );
+                                }).toList(),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  "Stok Hareketleri",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
                           basliklar: stokHareketleri.isNotEmpty
                               ? [
                                   TabloBaslik(
@@ -144,11 +142,10 @@ class StokHareketleriState
                                     baslik: "ÇIKIŞ MİKTARI",
                                     width: ogeGenisligi,
                                   ),
-                                  if (widget.stokKodu.isNotEmpty)
-                                    TabloBaslik(
-                                      baslik: "BAKİYE",
-                                      width: ogeGenisligi,
-                                    ),
+                                  TabloBaslik(
+                                    baslik: "BAKİYE",
+                                    width: ogeGenisligi,
+                                  ),
                                   TabloBaslik(
                                     baslik: "MÜŞTERİ",
                                     width: ogeGenisligi,
@@ -193,11 +190,10 @@ class StokHareketleriState
                                       : "",
                                   width: ogeGenisligi,
                                 ),
-                                if (widget.stokKodu.isNotEmpty)
-                                  TabloOgeText(
-                                    text: stokHareketi.bakiye.toString(),
-                                    width: ogeGenisligi,
-                                  ),
+                                TabloOgeText(
+                                  text: stokHareketi.bakiye.toString(),
+                                  width: ogeGenisligi,
+                                ),
                                 TabloOgeText(
                                   text: stokHareketi.stharAciklama,
                                   width: ogeGenisligi,
