@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:netsisstok/widgetlar/stok.dart';
 
 import '../modeller/stok.dart';
 import '../modeller/stok_hareket.dart';
 import '../modeller/veritabani_bilgileri.dart';
 import '../veritabani/veritabani.dart';
 import '../widgetlar/diyalog.dart';
+import '../widgetlar/stok.dart';
 import '../widgetlar/tablo.dart';
 import 'sayfa.dart';
 import 'stfl_widget.dart';
@@ -16,8 +16,8 @@ import 'veritabani_kaydet.dart';
 class StokHareketleri extends VarsayilanStatefulWidget {
   const StokHareketleri({
     super.key,
-    this.stokKodu = "",
-    this.stokAdi = "",
+    required this.stokKodu,
+    required this.stokAdi,
   });
 
   final String stokKodu;
@@ -40,26 +40,10 @@ class StokHareketleriState
 
   ScrollController stokHareketleriScrollController = ScrollController();
 
-  int yuklenecekOgeIndex = 0;
-  int yuklenecekOgeSayisi = 50;
-
-  bool yukleniyor = false;
-  bool hepsiYuklendi = false;
-
   @override
   void initState() {
     super.initState();
-    init(tumunuYenile: true);
-    stokHareketleriScrollController.addListener(() {
-      if (stokHareketleriScrollController.position.pixels >=
-              stokHareketleriScrollController.position.maxScrollExtent &&
-          !yukleniyor &&
-          !yenileniyor) {
-        if (widget.stokKodu.isEmpty) {
-          init(tumunuYenile: false);
-        }
-      }
-    });
+    init();
   }
 
   @override
@@ -70,7 +54,6 @@ class StokHareketleriState
 
   @override
   Widget build(BuildContext context) {
-    double yukleniyorYukseklik = 35;
     double tamBoyut = MediaQuery.of(context).size.width;
     double ogeGenisligi = tamBoyut > 600 ? tamBoyut / 5.5 : tamBoyut / 2.5;
     return Sayfa(
@@ -80,12 +63,11 @@ class StokHareketleriState
               ? widget.stokKodu
               : "Stok Hareketleri",
       yenileButonAktif: true,
-      yenileButonAction: (!yenileniyor && !yukleniyor)
+      yenileButonAction: (!yenileniyor)
           ? () async {
-              init(tumunuYenile: true);
+              init();
             }
           : null,
-      tumStokHareketleriButonuAktif: widget.stokKodu.isNotEmpty,
       icerik: LayoutBuilder(
         builder: (context, constraints) {
           return Stack(
@@ -95,7 +77,7 @@ class StokHareketleriState
                   top: 0,
                   left: 0,
                   right: 0,
-                  bottom: yukleniyor ? yukleniyorYukseklik : 0,
+                  bottom: 0,
                   child: Column(
                     children: [
                       Expanded(
@@ -245,22 +227,6 @@ class StokHareketleriState
                     ),
                   ),
                 ),
-              if (yukleniyor)
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    color: Colors.white38,
-                    height: yukleniyorYukseklik,
-                    child: Center(
-                      child: LoadingAnimationWidget.discreteCircle(
-                        color: Colors.blue,
-                        size: 30,
-                      ),
-                    ),
-                  ),
-                ),
             ],
           );
         },
@@ -269,24 +235,11 @@ class StokHareketleriState
   }
 
   void init({
-    required bool tumunuYenile,
     bool baglan = false,
   }) async {
-    if (tumunuYenile || widget.stokKodu.isNotEmpty) {
-      setState(() {
-        stokHareketleri = [];
-        yuklenecekOgeIndex = 0;
-        yenileniyor = true;
-        hepsiYuklendi = false;
-      });
-    } else {
-      if (hepsiYuklendi) {
-        return;
-      }
-      setState(() {
-        yukleniyor = true;
-      });
-    }
+    setState(() {
+      yenileniyor = true;
+    });
     try {
       VeritabaniBilgileriModel? veritabaniBilgileriModelTemp =
           await Veritabani.veritabaniBilgileriGetir();
@@ -303,8 +256,6 @@ class StokHareketleriState
         List<StokHareketModel> stokHareketleriTemp =
             await Veritabani.stokHareketleriGetir(
           veritabaniBilgileriModel,
-          baslangic: yuklenecekOgeIndex,
-          ogeSayisi: yuklenecekOgeSayisi,
           stokKodu: widget.stokKodu,
         );
         List<StokModel> stoklarTemp = await Veritabani.stoklariGetir(
@@ -313,26 +264,10 @@ class StokHareketleriState
           baslangic: 0,
           ogeSayisi: 1,
         );
-        if (stokHareketleriTemp.length < yuklenecekOgeSayisi) {
-          setState(() {
-            hepsiYuklendi = true;
-          });
-        }
-        if (stokHareketleriTemp.isNotEmpty) {
-          if (widget.stokKodu.isEmpty) {
-            setState(() {
-              yuklenecekOgeIndex += yuklenecekOgeSayisi;
-              stokHareketleri.addAll(stokHareketleriTemp);
-              stoklar = stoklarTemp;
-            });
-          } else {
-            setState(() {
-              yuklenecekOgeIndex = 0;
-              stokHareketleri = stokHareketleriTemp;
-              stoklar = stoklarTemp;
-            });
-          }
-        }
+        setState(() {
+          stokHareketleri = stokHareketleriTemp;
+          stoklar = stoklarTemp;
+        });
       }
     } catch (e) {
       veritabaniHata(
@@ -343,16 +278,9 @@ class StokHareketleriState
         print("Veritabanına baglanilamadı! Hata: ${e.toString()}");
       }
     }
-
-    if (tumunuYenile || widget.stokKodu.isNotEmpty) {
-      setState(() {
-        yenileniyor = false;
-      });
-    } else {
-      setState(() {
-        yukleniyor = false;
-      });
-    }
+    setState(() {
+      yenileniyor = false;
+    });
   }
 
   void veritabaniHata({
@@ -380,7 +308,7 @@ class StokHareketleriState
                 });
               },
             );
-            init(tumunuYenile: true, baglan: baglan);
+            init(baglan: baglan);
           },
           child: const Text("Tekrar Dene"),
         ),

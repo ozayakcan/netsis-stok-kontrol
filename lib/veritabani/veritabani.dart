@@ -150,14 +150,10 @@ class Veritabani {
 
   static Future<List<StokHareketModel>> stokHareketleriGetir(
     VeritabaniBilgileriModel? veritabaniBilgileriModel, {
-    required int baslangic,
-    required int ogeSayisi,
     required String stokKodu,
   }) async {
     if (veritabaniBilgileriModel != null) {
       Map<String, String> postVerileri = <String, String>{
-        baslangicStr: baslangic.toString(),
-        ogeSayisiStr: ogeSayisi.toString(),
         stokKoduStr: stokKodu.toString(),
       };
       postVerileri.addAll(veritabaniBilgileriModel.toMap());
