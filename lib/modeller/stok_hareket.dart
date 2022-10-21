@@ -91,6 +91,7 @@ class StokHareketModel {
     required this.yapkod,
     required this.mamyapkod,
     required this.otvfiyat,
+    required this.bakiye,
   });
   final String stokKodu;
   final String fisno;
@@ -179,6 +180,7 @@ class StokHareketModel {
   final String yapkod;
   final String mamyapkod;
   final Decimal otvfiyat;
+  final Decimal bakiye;
 
   static String stokKoduStr = "STOK_KODU";
   static String fisnoStr = "FISNO";
@@ -267,6 +269,9 @@ class StokHareketModel {
   static String yapkodStr = "YAPKOD";
   static String mamyapkodStr = "MAMYAPKOD";
   static String otvfiyatStr = "OTVFIYAT";
+  static String bakiyeStr = "BAKIYE";
+  static String girisStr = "G";
+  static String cikisStr = "C";
   factory StokHareketModel.fromJson(Map<String, dynamic> jsonData) {
     return StokHareketModel(
       stokKodu: Degiskenler.parseString(degisken: jsonData[stokKoduStr]),
@@ -367,6 +372,7 @@ class StokHareketModel {
       yapkod: Degiskenler.parseString(degisken: jsonData[yapkodStr]),
       mamyapkod: Degiskenler.parseString(degisken: jsonData[mamyapkodStr]),
       otvfiyat: Degiskenler.parseDecimal(degisken: jsonData[otvfiyatStr]),
+      bakiye: Degiskenler.parseDecimal(degisken: jsonData[bakiyeStr]),
     );
   }
 }

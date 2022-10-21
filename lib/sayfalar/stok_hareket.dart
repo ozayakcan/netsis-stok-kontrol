@@ -143,23 +143,32 @@ class StokHareketleriState
                           basliklar: stokHareketleri.isNotEmpty
                               ? [
                                   TabloBaslik(
-                                    baslik: "FİŞ NO",
-                                    width: ogeGenisligi,
-                                  ),
-                                  TabloBaslik(
-                                    baslik: "MÜŞTERİ",
-                                    width: ogeGenisligi,
-                                  ),
-                                  TabloBaslik(
                                     baslik: "TARİH",
                                     width: ogeGenisligi,
                                   ),
                                   TabloBaslik(
-                                    baslik: "VADE TARİHİ",
+                                    baslik: "FİŞ NO",
                                     width: ogeGenisligi,
                                   ),
                                   TabloBaslik(
-                                    baslik: "DÜZELTME TARİHİ",
+                                    baslik: "NET FİYAT",
+                                    width: ogeGenisligi,
+                                  ),
+                                  TabloBaslik(
+                                    baslik: "GİRİŞ MİKTARI",
+                                    width: ogeGenisligi,
+                                  ),
+                                  TabloBaslik(
+                                    baslik: "ÇIKIŞ MİKTARI",
+                                    width: ogeGenisligi,
+                                  ),
+                                  if (widget.stokKodu.isNotEmpty)
+                                    TabloBaslik(
+                                      baslik: "BAKİYE",
+                                      width: ogeGenisligi,
+                                    ),
+                                  TabloBaslik(
+                                    baslik: "MÜŞTERİ",
                                     width: ogeGenisligi,
                                   ),
                                 ]
@@ -174,21 +183,6 @@ class StokHareketleriState
                             return TabloOge(
                               ogeler: [
                                 TabloOgeText(
-                                  text: stokHareketi.fisno,
-                                  width: ogeGenisligi,
-                                ),
-                                TabloOgeText(
-                                  text: stokHareketi.stharAciklama,
-                                  width: ogeGenisligi,
-                                ),
-                                TabloOgeText(
-                                  text: Veritabani.mssqlTarih(
-                                    tarih: stokHareketi.stharTarih,
-                                    saatiGoster: false,
-                                  ),
-                                  width: ogeGenisligi,
-                                ),
-                                TabloOgeText(
                                   text: Veritabani.mssqlTarih(
                                     tarih: stokHareketi.vadeTarihi,
                                     saatiGoster: false,
@@ -196,10 +190,34 @@ class StokHareketleriState
                                   width: ogeGenisligi,
                                 ),
                                 TabloOgeText(
-                                  text: Veritabani.mssqlTarih(
-                                    tarih: stokHareketi.duzeltmetarihi,
-                                    saatiGoster: false,
+                                  text: stokHareketi.fisno,
+                                  width: ogeGenisligi,
+                                ),
+                                TabloOgeText(
+                                  text: stokHareketi.stharNf.toString(),
+                                  width: ogeGenisligi,
+                                ),
+                                TabloOgeText(
+                                  text: stokHareketi.stharGckod ==
+                                          StokHareketModel.girisStr
+                                      ? stokHareketi.stharGcmik.toString()
+                                      : "",
+                                  width: ogeGenisligi,
+                                ),
+                                TabloOgeText(
+                                  text: stokHareketi.stharGckod ==
+                                          StokHareketModel.cikisStr
+                                      ? stokHareketi.stharGcmik.toString()
+                                      : "",
+                                  width: ogeGenisligi,
+                                ),
+                                if (widget.stokKodu.isNotEmpty)
+                                  TabloOgeText(
+                                    text: stokHareketi.bakiye.toString(),
+                                    width: ogeGenisligi,
                                   ),
+                                TabloOgeText(
+                                  text: stokHareketi.stharAciklama,
                                   width: ogeGenisligi,
                                 ),
                               ],
