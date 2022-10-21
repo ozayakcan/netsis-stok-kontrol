@@ -55,7 +55,9 @@ class StokHareketleriState
               stokHareketleriScrollController.position.maxScrollExtent &&
           !yukleniyor &&
           !yenileniyor) {
-        init(tumunuYenile: false);
+        if (widget.stokKodu.isEmpty) {
+          init(tumunuYenile: false);
+        }
       }
     });
   }
@@ -252,7 +254,7 @@ class StokHareketleriState
     required bool tumunuYenile,
     bool baglan = false,
   }) async {
-    if (tumunuYenile) {
+    if (tumunuYenile || widget.stokKodu.isNotEmpty) {
       setState(() {
         stokHareketleri = [];
         yuklenecekOgeIndex = 0;
@@ -299,11 +301,19 @@ class StokHareketleriState
           });
         }
         if (stokHareketleriTemp.isNotEmpty) {
-          setState(() {
-            yuklenecekOgeIndex += yuklenecekOgeSayisi;
-            stokHareketleri.addAll(stokHareketleriTemp);
-            stoklar = stoklarTemp;
-          });
+          if (widget.stokKodu.isEmpty) {
+            setState(() {
+              yuklenecekOgeIndex += yuklenecekOgeSayisi;
+              stokHareketleri.addAll(stokHareketleriTemp);
+              stoklar = stoklarTemp;
+            });
+          } else {
+            setState(() {
+              yuklenecekOgeIndex = 0;
+              stokHareketleri = stokHareketleriTemp;
+              stoklar = stoklarTemp;
+            });
+          }
         }
       }
     } catch (e) {
@@ -316,7 +326,7 @@ class StokHareketleriState
       }
     }
 
-    if (tumunuYenile) {
+    if (tumunuYenile || widget.stokKodu.isNotEmpty) {
       setState(() {
         yenileniyor = false;
       });
