@@ -147,7 +147,7 @@ class StokHareketleriState
                                     width: ogeGenisligi,
                                   ),
                                   TabloBaslik(
-                                    baslik: "MÜŞTERİ",
+                                    baslik: "AÇIKLAMA",
                                     width: ogeGenisligi,
                                   ),
                                 ]
