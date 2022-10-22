@@ -51,7 +51,7 @@ class TabloBaslik extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(5),
       child: Wrap(
         alignment: WrapAlignment.start,
         runAlignment: WrapAlignment.start,
@@ -111,7 +111,10 @@ class TabloOgeText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 5,
+      ),
       width: width,
       child: Wrap(
         alignment: WrapAlignment.start,
