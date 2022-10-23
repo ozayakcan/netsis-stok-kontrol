@@ -105,47 +105,37 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                   ),
                 ),
               if (!yenileniyor)
-                Positioned(
+                Tablo(
+                  scrollController: stoklarScrollController,
                   top: aramaYukseklik,
-                  left: 0,
-                  right: 0,
                   bottom: yukleniyor ? yukleniyorYukseklik : 0,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Tablo(
-                          scrollController: stoklarScrollController,
-                          basliklar: stoklar.isNotEmpty
-                              ? stokBasliklar(
-                                  ogeGenisligi: ogeGenisligi,
-                                )
-                              : [
-                                  const SizedBox(
-                                    height: 50,
-                                    child: Text("Henüz bir stok eklenmemiş"),
-                                  )
-                                ],
-                          ogeler: stoklar.map((stok) {
-                            return StokOgeler(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => StokHareketleri(
-                                      stokKodu: stok.stokKodu,
-                                      stokAdi: stok.stokAdi,
-                                    ),
-                                  ),
-                                );
-                              },
-                              stok: stok,
-                              ogeGenisligi: ogeGenisligi,
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ],
-                  ),
+                  basliklar: stoklar.isNotEmpty
+                      ? stokBasliklar(
+                          ogeGenisligi: ogeGenisligi,
+                        )
+                      : [
+                          const SizedBox(
+                            height: 50,
+                            child: Text("Henüz bir stok eklenmemiş"),
+                          )
+                        ],
+                  ogeler: stoklar.map((stok) {
+                    return StokOgeler(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => StokHareketleri(
+                              stokKodu: stok.stokKodu,
+                              stokAdi: stok.stokAdi,
+                            ),
+                          ),
+                        );
+                      },
+                      stok: stok,
+                      ogeGenisligi: ogeGenisligi,
+                    );
+                  }).toList(),
                 ),
               if (yenileniyor)
                 Positioned(

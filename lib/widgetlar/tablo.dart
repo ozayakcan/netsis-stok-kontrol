@@ -1,39 +1,71 @@
 import 'package:flutter/material.dart';
 
-class Tablo extends StatelessWidget {
+import '../sayfalar/stfl_widget.dart';
+
+class Tablo extends VarsayilanStatefulWidget {
   const Tablo({
     super.key,
     required this.basliklar,
     required this.ogeler,
+    this.top,
+    this.bottom,
+    this.left = 0,
+    this.right = 0,
     this.scrollController,
     this.ekIcerik,
+    this.ilk = true,
   });
 
   final ScrollController? scrollController;
   final List<Widget> basliklar;
   final List<Widget> ogeler;
   final Widget? ekIcerik;
+  final double? top;
+  final double? bottom;
+  final double left;
+  final double right;
+  final bool ilk;
+  @override
+  VarsayilanStatefulWidgetState<Tablo> createState() => _TabloState();
+}
+
+class _TabloState extends VarsayilanStatefulWidgetState<Tablo> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    Widget icerik = SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: SingleChildScrollView(
-        controller: scrollController,
+        controller: widget.scrollController,
         scrollDirection: Axis.vertical,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (ekIcerik != null) ekIcerik!,
+            if (widget.ekIcerik != null) widget.ekIcerik!,
             Row(
-              children: basliklar,
+              children: widget.basliklar,
             ),
             Column(
-              children: ogeler,
+              children: widget.ogeler,
             )
           ],
         ),
       ),
     );
+    return widget.ilk
+        ? Positioned(
+            top: widget.top,
+            left: widget.left,
+            right: widget.right,
+            bottom: widget.bottom,
+            child: Column(
+              children: [
+                Expanded(
+                  child: icerik,
+                ),
+              ],
+            ),
+          )
+        : icerik;
   }
 }
 
