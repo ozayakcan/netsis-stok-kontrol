@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 
 import '../sayfalar/stfl_widget.dart';
 
@@ -30,42 +31,96 @@ class Tablo extends VarsayilanStatefulWidget {
 }
 
 class _TabloState extends VarsayilanStatefulWidgetState<Tablo> {
+  LinkedScrollControllerGroup scrollControllerGroup =
+      LinkedScrollControllerGroup();
+
+  ScrollController yatayController = ScrollController();
+  ScrollController baslikController = ScrollController();
+
+  GlobalKey ustKey = GlobalKey();
+
+  double baslikYukseklik = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    yatayController = scrollControllerGroup.addAndGet();
+    baslikController = scrollControllerGroup.addAndGet();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        setState(() {
+          baslikYukseklik = (ustKey.currentContext?.size?.height ?? 0);
+        });
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    yatayController.dispose();
+    baslikController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget icerik = SingleChildScrollView(
       scrollDirection: Axis.horizontal,
+      controller: yatayController,
       child: SingleChildScrollView(
         controller: widget.scrollController,
         scrollDirection: Axis.vertical,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          children: widget.ogeler,
+        ),
+      ),
+    );
+    Widget ust = SizedBox(
+      key: ustKey,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        controller: baslikController,
+        child: Column(
           children: [
             if (widget.ekIcerik != null) widget.ekIcerik!,
             Row(
               children: widget.basliklar,
             ),
-            Column(
-              children: widget.ogeler,
-            )
           ],
         ),
       ),
     );
     return widget.ilk
-        ? Positioned(
-            top: widget.top,
-            left: widget.left,
-            right: widget.right,
-            bottom: widget.bottom,
-            child: Column(
-              children: [
-                Expanded(
-                  child: icerik,
+        ? Stack(
+            children: [
+              Positioned(
+                top: widget.top,
+                left: widget.left,
+                right: widget.right,
+                child: ust,
+              ),
+              Positioned(
+                top: (widget.top ?? 0) + baslikYukseklik,
+                left: widget.left,
+                right: widget.right,
+                bottom: widget.bottom,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: icerik,
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           )
-        : icerik;
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ust,
+              icerik,
+            ],
+          );
   }
 }
 
