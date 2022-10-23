@@ -77,6 +77,7 @@ class StokHareketleriState
                   scrollController: stokHareketleriScrollController,
                   top: 0,
                   bottom: 0,
+                  bosUyari: "Henüz bir stok hareketi bulunmuyor.",
                   ekIcerik: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -113,43 +114,36 @@ class StokHareketleriState
                       ),
                     ],
                   ),
-                  basliklar: stokHareketleri.isNotEmpty
-                      ? [
-                          TabloBaslik(
-                            baslik: "TARİH",
-                            width: ogeGenisligi,
-                          ),
-                          TabloBaslik(
-                            baslik: "FİŞ NO",
-                            width: ogeGenisligi,
-                          ),
-                          TabloBaslik(
-                            baslik: "NET FİYAT",
-                            width: ogeGenisligi,
-                          ),
-                          TabloBaslik(
-                            baslik: "GİRİŞ MİKTARI",
-                            width: ogeGenisligi,
-                          ),
-                          TabloBaslik(
-                            baslik: "ÇIKIŞ MİKTARI",
-                            width: ogeGenisligi,
-                          ),
-                          TabloBaslik(
-                            baslik: "BAKİYE",
-                            width: ogeGenisligi,
-                          ),
-                          TabloBaslik(
-                            baslik: "AÇIKLAMA",
-                            width: ogeGenisligi,
-                          ),
-                        ]
-                      : [
-                          const SizedBox(
-                            height: 50,
-                            child: Text("Henüz bir stok hareketi bulunmuyor."),
-                          )
-                        ],
+                  basliklar: [
+                    TabloBaslik(
+                      baslik: "TARİH",
+                      width: ogeGenisligi,
+                    ),
+                    TabloBaslik(
+                      baslik: "FİŞ NO",
+                      width: ogeGenisligi,
+                    ),
+                    TabloBaslik(
+                      baslik: "NET FİYAT",
+                      width: ogeGenisligi,
+                    ),
+                    TabloBaslik(
+                      baslik: "GİRİŞ MİKTARI",
+                      width: ogeGenisligi,
+                    ),
+                    TabloBaslik(
+                      baslik: "ÇIKIŞ MİKTARI",
+                      width: ogeGenisligi,
+                    ),
+                    TabloBaslik(
+                      baslik: "BAKİYE",
+                      width: ogeGenisligi,
+                    ),
+                    TabloBaslik(
+                      baslik: "AÇIKLAMA",
+                      width: ogeGenisligi,
+                    ),
+                  ],
                   ogeler: stokHareketleri.map((stokHareketi) {
                     return TabloOge(
                       ogeler: [

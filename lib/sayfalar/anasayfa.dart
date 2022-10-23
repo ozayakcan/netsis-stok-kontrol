@@ -109,16 +109,10 @@ class AnaSayfaState extends VarsayilanStatefulWidgetState<AnaSayfa> {
                   scrollController: stoklarScrollController,
                   top: aramaYukseklik,
                   bottom: yukleniyor ? yukleniyorYukseklik : 0,
-                  basliklar: stoklar.isNotEmpty
-                      ? stokBasliklar(
-                          ogeGenisligi: ogeGenisligi,
-                        )
-                      : [
-                          const SizedBox(
-                            height: 50,
-                            child: Text("Henüz bir stok eklenmemiş"),
-                          )
-                        ],
+                  bosUyari: "Henüz bir stok eklenmemiş.",
+                  basliklar: stokBasliklar(
+                    ogeGenisligi: ogeGenisligi,
+                  ),
                   ogeler: stoklar.map((stok) {
                     return StokOgeler(
                       onPressed: () {

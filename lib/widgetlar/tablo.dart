@@ -15,6 +15,7 @@ class Tablo extends VarsayilanStatefulWidget {
     this.scrollController,
     this.ekIcerik,
     this.ilk = true,
+    this.bosUyari = "Liste boş.",
   });
 
   final ScrollController? scrollController;
@@ -26,6 +27,7 @@ class Tablo extends VarsayilanStatefulWidget {
   final double left;
   final double right;
   final bool ilk;
+  final String bosUyari;
   @override
   VarsayilanStatefulWidgetState<Tablo> createState() => _TabloState();
 }
@@ -38,8 +40,10 @@ class _TabloState extends VarsayilanStatefulWidgetState<Tablo> {
   ScrollController baslikController = ScrollController();
 
   GlobalKey ustKey = GlobalKey();
+  GlobalKey ustKey2 = GlobalKey();
 
   double baslikYukseklik = 0;
+  double? baslikGenislik;
 
   @override
   void initState() {
@@ -50,6 +54,7 @@ class _TabloState extends VarsayilanStatefulWidgetState<Tablo> {
       (timeStamp) {
         setState(() {
           baslikYukseklik = (ustKey.currentContext?.size?.height ?? 0);
+          baslikGenislik = ustKey2.currentContext?.size?.width;
         });
       },
     );
@@ -71,7 +76,15 @@ class _TabloState extends VarsayilanStatefulWidgetState<Tablo> {
         controller: widget.scrollController,
         scrollDirection: Axis.vertical,
         child: Column(
-          children: widget.ogeler,
+          children: widget.ogeler.isNotEmpty
+              ? widget.ogeler
+              : [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    width: baslikGenislik,
+                    child: Text(widget.bosUyari),
+                  )
+                ],
         ),
       ),
     );
@@ -84,6 +97,7 @@ class _TabloState extends VarsayilanStatefulWidgetState<Tablo> {
           children: [
             if (widget.ekIcerik != null) widget.ekIcerik!,
             Row(
+              key: ustKey2,
               children: widget.basliklar,
             ),
           ],
